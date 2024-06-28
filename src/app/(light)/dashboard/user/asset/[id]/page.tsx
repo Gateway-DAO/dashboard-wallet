@@ -1,45 +1,51 @@
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
-import BackButton from '@/components/buttons/back-button/back-button';
-import TopBarContainer from '@/components/containers/top-bar-container/top-bar-container';
 import routes from '@/constants/routes';
-import { getPDA } from '@/services/server-functions/pda';
-import { getSessionOrg } from '@/utils/currentOrg';
+import { getGtwServerSession } from '@/services/next-auth/get-gtw-server-session';
 
-import PDAItem from './components/pda-item';
+import PDADetailPage from './components/content';
 
 export async function generateMetadata({
   params,
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const pda = await getPDA(params.id);
+  const session = await getGtwServerSession();
+  if (!session) {
+    return redirect(routes.login);
+  }
+  const pda = session.shared.find((pda) => pda.id === parseInt(params.id, 10));
   return {
-    title: `${pda?.dataAsset?.title} | Data Asset - Gateway Network`,
-    description: pda?.dataAsset?.description,
+    title: `${pda?.fileName ?? pda?.dataAsset?.title} - Gateway Network`,
   };
 }
 
-export default async function PDAPage({
-  params,
-}: {
-  params: { id: string; username: string };
-}) {
-  const pda = await getPDA(params.id);
-  const org = await getSessionOrg(params.username);
+export default async function PDAPage({ params }: { params: { id: string } }) {
+  const session = await getGtwServerSession();
+  if (!session) {
+    return redirect(routes.login);
+  }
+  const pda = session.shared.find((pda) => pda.id === parseInt(params.id, 10));
+
+  const org: any = undefined;
+
+  if (!pda) {
+    return redirect(routes.dashboard.user.myAssets);
+  }
+
+  const isOwner = pda.owner.did === session.user.did;
 
   return (
-    <>
-      <TopBarContainer>
-        <BackButton
-          href={
-            !!org
-              ? routes.dashboard.org.issuedAssets(org?.gatewayId)
-              : routes.dashboard.user.receivedAssets
-          }
-        />
-      </TopBarContainer>
-      <PDAItem pda={pda} />
-    </>
+    <PDADetailPage
+      isOwner={isOwner}
+      pda={pda}
+      org={org}
+      backHref={
+        !!org
+          ? routes.dashboard.org.issuedAssets(org?.did)
+          : routes.dashboard.user.myAssets
+      }
+    />
   );
 }

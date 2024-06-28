@@ -8,12 +8,16 @@ export const pda = {
     revoked: 'Revoked',
   },
   share: {
-    share_a_copy_with: 'Share a copy with',
+    share_a_copy_with: 'Share this data',
     share_a_copy_description: 'Fill a Gateway ID, email or wallet',
+    share_now: 'Share now',
+    shared_with: 'Shared with',
+    data: 'Data',
     sharing_cost: 'Proof sharing cost',
-    sharing_cost_helper: 'For now Gateway is covering sharing costs',
     free: 'Free',
-    successfully_title: 'Copy shared successfully',
+    successfully_title: 'Data shared successfully',
+    error_title: 'Error sharing data',
+    user_doesnt_exist: 'User does not exist',
   },
   shared_with: {
     shared_with: 'Shared with',
@@ -53,7 +57,7 @@ export const pda = {
 export const pdas = {
   empty: 'No data assets yet',
   load_more: 'load more',
-  my_data_assets: 'My Data',
+  my_data_assets: 'My data vault',
   data_asset: 'Data asset',
   recipient: 'Recipient',
   status: 'Status',
@@ -62,6 +66,7 @@ export const pdas = {
   data_assets_subtitle:
     'These are the personal data assets you have earned and created.',
   issue_a_pda: 'Issue a PDA',
+  upload_file: 'Upload file',
 };
 export const orgPdas = {
   empty: 'No Issuances yet',
@@ -139,4 +144,11 @@ export const issuePdaForm = {
     datetime: 'Date Time in UTC timezone',
     time: 'Time in UTC timezone',
   },
+};
+
+export const pdaTableColumnNames = {
+  name: 'Name',
+  uploadedBy: 'Uploaded By',
+  sharing: 'Sharing',
+  lastModified: 'Last Modified',
 };

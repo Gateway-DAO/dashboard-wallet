@@ -1,14 +1,14 @@
-import { Login_DataFragment, MeQuery } from '@/services/protocol/types';
+import { DecryptedData } from '@/services/next-auth/libs/get-decrypted-data';
+import { MeQuery } from '@/services/protocol-v3/types';
 
-export type SessionUser = MeQuery['me'];
-
-export type SessionToken = Login_DataFragment & {
-  error?: any;
-  skipEmail?: boolean;
+type UserV3Data = Omit<MeQuery, 'me'> & {
+  user: MeQuery['me'];
 };
 
-export type Session = Login_DataFragment & {
-  error?: any;
-  user: SessionUser;
-  skipEmail?: boolean;
-};
+export type LoginSessionV3 = {
+  privateKey: string;
+  token: string;
+  injectData: DecryptedData;
+} & UserV3Data;
+
+export type SessionV3 = LoginSessionV3 & DecryptedData;

@@ -1,0 +1,14 @@
+query pdas {
+  myPDAs {
+    id
+    issuer {
+      did
+      username
+    }
+    fileName
+    issuanceDate
+    mimeType
+    structured
+    url
+  }
+}

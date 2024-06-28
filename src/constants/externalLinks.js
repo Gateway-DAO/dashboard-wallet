@@ -12,6 +12,7 @@ const externalLinks = {
   gateway_wallet_android:
     'https://play.google.com/store/apps/details?id=mygateway.xyz.gatekeeper',
   gateway_wallet_ios: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  increase_storage: 'https://mygateway.typeform.com/to/PDsttJNv',
 };
 
 module.exports = externalLinks;

@@ -3,7 +3,8 @@ const dashboardOrg = '/dashboard/org';
 const explorer = '/explorer';
 const routes = {
   home: '/',
-  auth: '/login',
+  login: '/login',
+  signUp: '/sign-up',
   learn: '/learn',
   build: '/build',
   dashboard: {
@@ -37,16 +38,13 @@ const routes = {
       root: dashboardOrg,
     },
     user: {
-      home: `${dashboardUser}/home`,
+      home: `${dashboardUser}/`,
       issue: `${dashboardUser}/assets/issue`,
       issuePda: (id) => `${dashboardUser}/assets/issue/${id}`,
       asset: (pdaId) => `${dashboardUser}/asset/${pdaId}`,
-      issuedAssets: `${dashboardUser}/assets/issued`,
-      receivedAssets: `${dashboardUser}/assets/received`,
-      proofs: `${dashboardUser}/proofs`,
-      proof: (proofId) => `${dashboardUser}/proof/${proofId}`,
-      sentProofs: `${dashboardUser}/proofs/sent`,
-      receivedProofs: `${dashboardUser}/proofs/received`,
+      myAssets: `${dashboardUser}/assets`,
+      shared: `${dashboardUser}/shared`,
+      sharedData: (proofId) => `${dashboardUser}/shared/${proofId}`,
       request: (requestId) => `${dashboardUser}/request/${requestId}`,
       requests: `${dashboardUser}/requests`,
       myRequestTemplates: `${dashboardUser}/request-templates/my`,
@@ -78,6 +76,7 @@ const routes = {
     requestTemplatePlayground: (requestTemplateId) =>
       `${explorer}/request-templates/${requestTemplateId}/playground`,
   },
+  appStore: '/api/wallet-download',
 };
 
 module.exports = routes;

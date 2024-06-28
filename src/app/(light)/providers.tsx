@@ -5,8 +5,6 @@ import { ThemeProvider } from '@/theme';
 
 import ClientProviders from './client-provider';
 
-// TODO: pass session from Layout
-
 export default function Providers({ children }: PropsWithChildren) {
   return (
     <ClientProviders>

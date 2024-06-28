@@ -67,10 +67,10 @@ export default function AuthComponent({ id, controlId }: Props) {
           />
         ) : (
           <UserOrgInfo
-            id={user.id!}
-            image={user.profilePicture}
-            name={user.displayName!}
-            gatewayId={user.gatewayId!}
+            id={user.did!}
+            image={null}
+            name={null}
+            gatewayId={user.username!}
           />
         )}
 
