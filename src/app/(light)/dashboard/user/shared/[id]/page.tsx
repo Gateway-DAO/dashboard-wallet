@@ -30,7 +30,9 @@ export default async function SharedPage({
   if (!session) {
     return redirect(routes.login);
   }
-  const pda = session.shared.find((pda) => pda.id === parseInt(params.id, 10));
+  const pda = session.sharedPdas.find(
+    (pda) => pda.id === parseInt(params.id, 10)
+  );
 
   const org: any = undefined;
 
