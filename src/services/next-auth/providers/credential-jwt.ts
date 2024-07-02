@@ -28,7 +28,7 @@ const credentialJwt = CredentialsProvider({
       privateKey,
       injectData: {
         pdas: [],
-        shared: [],
+        sharedPdas: [],
       },
     };
   },
