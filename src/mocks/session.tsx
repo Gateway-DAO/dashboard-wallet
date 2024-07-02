@@ -11,18 +11,7 @@ export const session: PartialDeep<Session> = {
   user: {
     id: '12345',
     username: 'carl',
-    accesses: [
-      {
-        organization: {
-          did: '12345',
-          name: 'gateway',
-          image: '',
-          usernameUpdatedAt: '',
-          verified: true,
-        },
-        role: OrganizationRole.Admin,
-      },
-    ],
+    accesses: [],
   },
 };
 
