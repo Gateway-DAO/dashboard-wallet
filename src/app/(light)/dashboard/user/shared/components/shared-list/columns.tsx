@@ -6,6 +6,7 @@ import DataOutlinedIcon from '@/components/icons/data-outlined';
 import { DATE_FORMAT } from '@/constants/date';
 import { pdaTableColumnNames } from '@/locale/en/pda';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
+import { getIdentity } from '@/utils/identity';
 import { FileType, getFileTypeByMime, getIconFile } from '@/utils/pda';
 import { limitCharsCentered } from '@/utils/string';
 import dayjs from 'dayjs';
@@ -52,18 +53,27 @@ export const columns: GridColDef<PrivateDataAsset>[] = [
     field: 'uploaded by',
     headerName: pdaTableColumnNames.uploadedBy,
     flex: 1,
-    renderCell: (params) => (
-      <Stack direction={'row'}>
-        <GTWAvatar
-          name={params.row.issuer.did}
-          alt={params.row.issuer.username}
-        />
-        <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
-          {params.row.issuer.username ??
-            limitCharsCentered(params.row.issuer.did, 10)}
-        </Typography>
-      </Stack>
-    ),
+    renderCell: (params) => {
+      const pda = params.row;
+
+      const issuer = getIdentity({
+        organization: pda.organization,
+        user: pda.issuer,
+      });
+
+      return (
+        <Stack direction={'row'}>
+          <GTWAvatar
+            name={issuer.did}
+            alt={issuer.username}
+            src={issuer.image}
+          />
+          <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
+            {issuer.username ?? limitCharsCentered(issuer.did, 10)}
+          </Typography>
+        </Stack>
+      );
+    },
   },
   // {
   //   field: 'sharing',

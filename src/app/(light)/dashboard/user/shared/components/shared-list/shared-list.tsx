@@ -21,7 +21,11 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import UpdateModal from '../../../../components/update-modal/update-modal';
 import { columns } from './columns';
 
-export default function SharedList() {
+type Props = {
+  pdas: PrivateDataAsset[];
+};
+
+export default function SharedList({ pdas }: Props) {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
   const [isOpen, toggleOpen] = useToggle(false);
@@ -36,15 +40,11 @@ export default function SharedList() {
 
   const isLoading = status === 'loading' || isFetchingLatestPdas;
 
-  const pdas = [];
-
-  console.log(data);
-
   return (
     <>
       <DataGrid
         {...defaultGridConfiguration}
-        rows={[]}
+        rows={pdas}
         columns={columns}
         initialState={{
           pagination: {
