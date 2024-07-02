@@ -66,7 +66,11 @@ export const columns: GridColDef<ListPrivateDataAsset>[] = [
 
       return (
         <Stack direction={'row'}>
-          <GTWAvatar name={issuer.did} alt={issuer.username} />
+          <GTWAvatar
+            name={issuer.did}
+            alt={issuer.username}
+            src={issuer.image}
+          />
           <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
             {issuer.username ?? limitCharsCentered(issuer.did, 10)}
           </Typography>

@@ -1,6 +1,7 @@
 'use client';
 import GTWAvatar from '@/components/gtw-avatar/gtw-avatar';
 import { errorMessages } from '@/locale/en/errors';
+import { Identity } from '@/utils/identity';
 import { limitCharsOffset } from '@/utils/string';
 import { useSnackbar } from 'notistack';
 
@@ -8,13 +9,7 @@ import { ContentCopy } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { Typography, Stack } from '@mui/material';
 
-export default function UserData({
-  username,
-  did,
-}: {
-  username?: string | null;
-  did: string;
-}) {
+export default function UserData({ username, did, image }: Identity) {
   const { enqueueSnackbar } = useSnackbar();
 
   const copy = async (text: string) => {
@@ -33,7 +28,7 @@ export default function UserData({
       justifyItems="flex-start"
       borderRadius={0}
     >
-      <GTWAvatar name={did} alt={username ?? did} size={45} />
+      <GTWAvatar name={did} alt={username ?? did} src={image} size={45} />
       <Stack
         component="span"
         direction={!!username ? 'column' : 'row'}
