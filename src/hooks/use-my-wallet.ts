@@ -16,11 +16,11 @@ export default function useMyWallet() {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: [
       queries.my_wallet,
-      organization ? organization.id : session?.user.id,
+      organization ? organization.did : session?.user.id,
     ],
     queryFn: () =>
       privateApi.my_balance({
-        organizationId: organization?.id as string,
+        organizationId: organization?.did as string,
       }),
     select: (data) => data.myWallet,
     refetchInterval: 60 * 1000,

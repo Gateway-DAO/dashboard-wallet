@@ -27,7 +27,7 @@ export const nextAuthConfig: NextAuthOptions = {
       if (trigger === 'update' && token && session?.type) {
         const sessionUpdate: SessionUpdate = session;
         if (!token.injectData) {
-          token.injectData = { pdas: [], shared: [] };
+          token.injectData = { pdas: [], sharedPdas: [] };
         }
 
         switch (sessionUpdate?.type) {
@@ -38,9 +38,9 @@ export const nextAuthConfig: NextAuthOptions = {
             ];
             break;
           case 'shared':
-            token.injectData.shared = [
+            token.injectData.sharedPdas = [
               ...sessionUpdate.pdas,
-              ...token.injectData.shared,
+              ...token.injectData.sharedPdas,
             ];
             break;
           default:
@@ -61,8 +61,8 @@ export const nextAuthConfig: NextAuthOptions = {
           ...(token.injectData?.pdas && {
             pdas: [...token.injectData?.pdas, ...data.pdas],
           }),
-          ...(token.injectData?.shared && {
-            shared: [...token.injectData?.shared, ...data.shared],
+          ...(token.injectData?.sharedPdas && {
+            sharedPdas: [...token.injectData?.sharedPdas, ...data.sharedPdas],
           }),
           user,
         } satisfies SessionV3 as any;

@@ -60,10 +60,10 @@ export default function AuthComponent({ id, controlId }: Props) {
       >
         {isOrg ? (
           <UserOrgInfo
-            id={organization.id!}
+            id={organization.did!}
             image={organization.image!}
             name={organization.name!}
-            gatewayId={organization.gatewayId!}
+            gatewayId={organization.orgname!}
           />
         ) : (
           <UserOrgInfo

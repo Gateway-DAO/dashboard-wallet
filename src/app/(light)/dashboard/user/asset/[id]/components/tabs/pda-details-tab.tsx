@@ -1,11 +1,10 @@
 import UserData from '@/app/(light)/dashboard/components/user-data/user-data';
 import Tags from '@/components/tags/tags';
 import { DATE_FORMAT } from '@/constants/date';
-import { errorMessages } from '@/locale/en/errors';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { formatBytes } from '@/utils/bytes';
+import { getIdentity } from '@/utils/identity';
 import dayjs from 'dayjs';
-import { useSnackbar } from 'notistack';
 
 import { Stack } from '@mui/material';
 import { Divider } from '@mui/material';
@@ -21,7 +20,12 @@ export default function PDADetailsTab({ pda }: Props) {
     <Stack pt={3} divider={<Divider />}>
       <IndividualDetailRow>
         <RowText title="Uploaded By" />
-        <UserData did={pda.issuer.did} username={pda.issuer.username} />
+        <UserData
+          {...getIdentity({
+            organization: pda.organization,
+            user: pda.issuer,
+          })}
+        />
       </IndividualDetailRow>
       <IndividualDetailRow>
         <RowText title="Owner" />
