@@ -15,9 +15,8 @@ export async function generateMetadata({
   if (!session) {
     return redirect(routes.login);
   }
-  const pda = session.sharedPdas.find(
-    (pda) => pda.id === parseInt(params.id, 10)
-  );
+  const pda = session.pdas.find((pda) => pda.id === parseInt(params.id, 10));
+
   return {
     title: `${pda?.fileName ?? pda?.dataAsset?.title} - Gateway Network`,
   };
@@ -28,9 +27,7 @@ export default async function PDAPage({ params }: { params: { id: string } }) {
   if (!session) {
     return redirect(routes.login);
   }
-  const pda = session.sharedPdas.find(
-    (pda) => pda.id === parseInt(params.id, 10)
-  );
+  const pda = session.pdas.find((pda) => pda.id === parseInt(params.id, 10));
 
   const org: any = undefined;
 

@@ -20,7 +20,7 @@ export default function PDAMetaDataDetails({ pda, isOwner }: Props) {
         xs: 'column-reverse',
         lg: 'column',
       }}
-      gap={2}
+      gap={5}
     >
       <Stack
         direction="row"

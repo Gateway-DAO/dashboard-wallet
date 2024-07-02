@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import BackButton from '@/components/buttons/back-button/back-button';
 import TopBarContainer from '@/components/containers/top-bar-container/top-bar-container';
 import routes from '@/constants/routes';
@@ -12,6 +14,7 @@ import { Stack, Box, Divider } from '@mui/material';
 
 import PageContainer from './container';
 import PDAMetaDataDetails from './pda-meta-data-details';
+import PDASkeleton from './pda-skeleton';
 import FileDetail from './pda-types/file-detail';
 import StructuredDetail from './pda-types/structured-detail';
 
@@ -40,15 +43,19 @@ export default function PDADetailPage({ pda, org, isOwner, backHref }: Props) {
           sx={{
             pt: {
               xs: 4,
-              lg: 10,
+              lg: 5,
             },
             width: '100%',
             height: '100%',
           }}
         >
-          <Stack direction={'column'}>
-            {pda.structured ? <StructuredDetail pda={pda} /> : <FileDetail />}
-          </Stack>
+          {pda.structured ? (
+            <Suspense fallback={<PDASkeleton />}>
+              <StructuredDetail pda={pda} />
+            </Suspense>
+          ) : (
+            <FileDetail />
+          )}
         </Stack>
       </Box>
       <Divider orientation="vertical" flexItem />
