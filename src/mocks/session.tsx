@@ -11,6 +11,7 @@ export const session: PartialDeep<Session> = {
   user: {
     id: '12345',
     username: 'carl',
+    accesses: [],
   },
 };
 
