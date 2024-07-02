@@ -82,11 +82,11 @@ export default function TransactionsTable() {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: [
       queries.my_transactions_count,
-      organization ? organization.id : session?.user.did,
+      organization ? organization.did : session?.user.did,
     ],
     queryFn: () =>
       privateApi?.my_transactions_count({
-        organizationId: organization ? (organization?.id as string) : '',
+        organizationId: organization ? (organization?.did as string) : '',
       }),
     select: (data: My_Transactions_CountQuery) =>
       data.myFinancialTransactionsCount,
@@ -96,7 +96,7 @@ export default function TransactionsTable() {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: [
       queries.my_transactions,
-      organization ? organization.id : session?.user.did,
+      organization ? organization.did : session?.user.did,
       paginationModel ? paginationModel.page : 0,
       paginationModel ? paginationModel.pageSize : 10,
     ],
@@ -104,7 +104,7 @@ export default function TransactionsTable() {
       privateApi?.my_transactions({
         skip: paginationModel.page * paginationModel.pageSize,
         take: paginationModel.pageSize,
-        organizationId: organization ? (organization?.id as string) : '',
+        organizationId: organization ? (organization?.did as string) : '',
       }),
     select: (data: My_TransactionsQuery) => data.myFinancialTransactions,
   });

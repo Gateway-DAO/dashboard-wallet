@@ -37,7 +37,7 @@ export default function TransactionCardInfo({
   //       url: '',
   //     };
   //     obj.url = !!organization
-  //       ? routes.dashboard.org.proof(organization.gatewayId, objectId)
+  //       ? routes.dashboard.org.proof(organization.orgname, objectId)
   //       : routes.dashboard.user.proof(objectId);
   //     return obj;
   //   }
@@ -47,7 +47,7 @@ export default function TransactionCardInfo({
   //       url: '',
   //     };
   //     obj.url = !!organization
-  //       ? routes.dashboard.org.asset(organization.gatewayId, objectId)
+  //       ? routes.dashboard.org.asset(organization.orgname, objectId)
   //       : routes.dashboard.user.asset(objectId);
   //     return obj;
   //   }

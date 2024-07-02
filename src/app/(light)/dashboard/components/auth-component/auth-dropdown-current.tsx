@@ -15,12 +15,12 @@ export default function AuthDropdownCurrent({ onClose }: Props) {
   const { data: session } = useSession();
 
   const profileImage = isOrg ? organization?.image : undefined;
-  const username = organization?.gatewayId ?? session?.user?.username;
+  const username = organization?.orgname ?? session?.user?.username;
   const hasName = !!organization?.name;
   let name = `@${session?.user?.username}`;
 
   if (isOrg) {
-    name = organization?.name ?? `@${organization?.gatewayId}`;
+    name = organization?.name ?? `@${organization?.orgname}`;
   }
 
   return (
@@ -36,7 +36,7 @@ export default function AuthDropdownCurrent({ onClose }: Props) {
     >
       <Stack direction="column" gap={1} sx={{ width: '100%' }}>
         <GTWAvatar
-          name={organization?.id ?? session?.user?.id}
+          name={organization?.did ?? session?.user?.did}
           src={profileImage}
           alt={name}
           size={64}

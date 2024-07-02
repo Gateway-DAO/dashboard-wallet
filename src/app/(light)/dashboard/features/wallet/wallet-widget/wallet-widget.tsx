@@ -34,7 +34,7 @@ export default function WalletWidget({ id }: Props) {
   const { myWallet, isLoading } = useMyWallet();
 
   const walletPage = !!organization
-    ? routes.dashboard.org.wallet(organization.gatewayId)
+    ? routes.dashboard.org.wallet(organization.orgname)
     : routes.dashboard.user.wallet;
 
   if (status === 'loading' || !session || isLoading) {
