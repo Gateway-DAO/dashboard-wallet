@@ -21,7 +21,10 @@ export default function PDADetailsTab({ pda }: Props) {
     <Stack pt={3} divider={<Divider />}>
       <IndividualDetailRow>
         <RowText title="Uploaded By" />
-        <UserData did={pda.issuer.did} username={pda.issuer.username} />
+        <UserData
+          did={pda?.organization?.did ?? pda.issuer.did}
+          username={pda?.organization?.orgname ?? pda.issuer.username}
+        />
       </IndividualDetailRow>
       <IndividualDetailRow>
         <RowText title="Owner" />
