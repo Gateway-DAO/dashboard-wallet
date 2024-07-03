@@ -7,7 +7,7 @@ import { DATE_FORMAT } from '@/constants/date';
 import { pdaTableColumnNames } from '@/locale/en/pda';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { getIdentity } from '@/utils/identity';
-import { FileType, getFileTypeByMime, getIconFile } from '@/utils/pda';
+import { FileType, getFileTypeByPda, getIconFile } from '@/utils/pda';
 import { limitCharsCentered } from '@/utils/string';
 import dayjs from 'dayjs';
 
@@ -32,7 +32,7 @@ export const columns: GridColDef<PrivateDataAsset>[] = [
         name = params.row.fileName;
       }
 
-      const fileType = getFileTypeByMime(params.row);
+      const fileType = getFileTypeByPda(params.row);
       const icon = getIconFile(fileType);
 
       return (
