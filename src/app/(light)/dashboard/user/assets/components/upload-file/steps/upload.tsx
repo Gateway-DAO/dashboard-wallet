@@ -115,7 +115,7 @@ export default function UploadModalUploadFiles({
   });
 
   useEffect(() => {
-    if (status === 'success') {
+    if (status !== 'loading') {
       onFinished?.();
     }
   }, [status, onFinished]);
