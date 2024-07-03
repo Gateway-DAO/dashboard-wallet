@@ -11,11 +11,10 @@ import { readUploadedFile } from './utils';
 type Props = {
   currentUserStorage: number;
   onChange: (files: FileType[]) => void;
-  onError: (error: FileErrorProps) => void;
 };
 
 function FilePickerField(
-  { currentUserStorage, onError, onChange }: Props,
+  { currentUserStorage, onChange }: Props,
   ref: Ref<HTMLInputElement>
 ) {
   const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,12 +25,7 @@ function FilePickerField(
     try {
       const files = readUploadedFile(selectedFiles, currentUserStorage);
       onChange(files);
-    } catch (e: any) {
-      onError({
-        title: 'Error',
-        description: e.message,
-      });
-    }
+    } catch (e: any) {}
     (event.target.value as any) = ''; // enables re-select of the same file
   };
 

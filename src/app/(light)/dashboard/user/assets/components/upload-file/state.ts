@@ -8,40 +8,22 @@ export enum Step {
   Details = 'details',
   QR = 'qr',
   Upload = 'upload',
-  Success = 'success',
-  Error = 'error',
+  Finished = 'finished',
 }
-
-type Error = {
-  title: string;
-  description: string;
-};
 
 type StepState =
   | { step: Step.Closed }
   | { step: Step.Details; files: FileType[] }
   | { step: Step.QR; files: FileType[] }
   | { step: Step.Upload; files: FileType[]; pda: PrivateDataAsset }
-  | { step: Step.Success; files: FileType[]; pda: PrivateDataAsset }
-  | {
-      step: Step.Error;
-      files?: FileType[];
-      pda?: PrivateDataAsset;
-      error: Error;
-    };
+  | { step: Step.Finished; files: FileType[]; pda: PrivateDataAsset };
 
 type StepAction =
   | { type: 'CLOSE' }
   | { type: 'SET_DETAILS'; files: FileType[] }
   | { type: 'SET_QR'; files: FileType[] }
   | { type: 'SET_UPLOAD'; files: FileType[]; pda: PrivateDataAsset }
-  | { type: 'SET_SUCCESS'; files: FileType[]; pda: PrivateDataAsset }
-  | {
-      type: 'SET_ERROR';
-      files?: FileType[];
-      pda?: PrivateDataAsset;
-      error: Error;
-    };
+  | { type: 'SET_SUCCESS'; files: FileType[]; pda: PrivateDataAsset };
 
 const stepReducer = (state: StepState, action: StepAction): StepState => {
   switch (action.type) {
@@ -54,14 +36,7 @@ const stepReducer = (state: StepState, action: StepAction): StepState => {
     case 'SET_UPLOAD':
       return { step: Step.Upload, files: action.files, pda: action.pda };
     case 'SET_SUCCESS':
-      return { step: Step.Success, files: action.files, pda: action.pda };
-    case 'SET_ERROR':
-      return {
-        step: Step.Error,
-        files: action.files,
-        pda: action.pda,
-        error: action.error,
-      };
+      return { step: Step.Finished, files: action.files, pda: action.pda };
     default:
       return state;
   }
@@ -78,10 +53,8 @@ export const useUploadFileState = () => {
   const setQr = (files: FileType[]) => dispatch({ type: 'SET_QR', files });
   const setUpload = (files: FileType[], pda: PrivateDataAsset) =>
     dispatch({ type: 'SET_UPLOAD', files, pda });
-  const setSuccess = (files: FileType[], pda: PrivateDataAsset) =>
+  const setFinished = (files: FileType[], pda: PrivateDataAsset) =>
     dispatch({ type: 'SET_SUCCESS', files, pda });
-  const setError = (error: Error, files?: FileType[], pda?: PrivateDataAsset) =>
-    dispatch({ type: 'SET_ERROR', files, pda, error });
 
-  return { state, close, setDetails, setQr, setUpload, setSuccess, setError };
+  return { state, close, setDetails, setQr, setUpload, setFinished };
 };

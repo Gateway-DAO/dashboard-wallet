@@ -10,16 +10,12 @@ import UploadModalQrCode from './steps/qr-code';
 import UploadModalUploadFiles from './steps/upload';
 
 export function UploadFile() {
-  const { state, close, setDetails, setError, setQr, setUpload } =
+  const { state, close, setDetails, setFinished, setQr, setUpload } =
     useUploadFileState();
 
   return (
     <>
-      <FilePicker
-        currentUserStorage={1000}
-        onError={setError}
-        onChange={setDetails}
-      />
+      <FilePicker currentUserStorage={1000} onChange={setDetails} />
       <ModalRight
         open={state.step !== Step.Closed}
         onClose={() => {
@@ -44,17 +40,18 @@ export function UploadFile() {
             }}
           />
         )}
-        {state.step === Step.Upload && (
-          <UploadModalUploadFiles file={state.files[0]} pda={state.pda} />
+        {(state.step === Step.Upload || state.step === Step.Finished) && (
+          <UploadModalUploadFiles
+            file={state.files[0]}
+            pda={state.pda}
+            onFinished={
+              state.step === Step.Upload
+                ? () => setFinished(state.files, state.pda)
+                : undefined
+            }
+          />
         )}
       </ModalRight>
-      {/* <UploadModal
-        isOpen={isOpen}
-        toggle={toggle}
-        files={files}
-        error={error}
-        onFileUpload={setOnFileUpload}
-      /> */}
     </>
   );
 }

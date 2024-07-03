@@ -1,25 +1,68 @@
+'use client';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
 
 import { FileType } from '@/components/form/file-picker/types';
+import routes from '@/constants/routes';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
+import { SessionUpdate } from '@/types/session';
 import { numberToMoneyString } from '@/utils/money';
 import { useQuery } from '@tanstack/react-query';
 
-import { Box, LinearProgress, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Check, ErrorOutline, Sync, X } from '@mui/icons-material';
+import { Avatar, Box, Button, LinearProgress, Typography } from '@mui/material';
+import { Stack, alpha } from '@mui/system';
 
 import FileDetail from '../file-detail';
 
 type Props = {
   file: FileType;
   pda: PrivateDataAsset;
+  onFinished?: () => void;
 };
 
-export default function UploadModalUploadFiles({ file, pda }: Props) {
-  const { data: session } = useSession();
+const LoadingIcon = () => (
+  <Avatar
+    variant="rounded"
+    sx={(theme) => ({
+      backgroundColor: alpha(theme.palette.primary.main, 0.08),
+    })}
+  >
+    <Sync color="primary" />
+  </Avatar>
+);
 
-  const { status, data, error } = useQuery({
+const SuccessIcon = () => (
+  <Avatar
+    variant="rounded"
+    sx={(theme) => ({
+      backgroundColor: alpha(theme.palette.success.main, 0.08),
+    })}
+  >
+    <Check color="success" />
+  </Avatar>
+);
+
+const ErrorIcon = () => (
+  <Avatar
+    variant="rounded"
+    sx={(theme) => ({
+      backgroundColor: alpha(theme.palette.error.main, 0.08),
+    })}
+  >
+    <ErrorOutline color="error" />
+  </Avatar>
+);
+
+export default function UploadModalUploadFiles({
+  file,
+  pda,
+  onFinished,
+}: Props) {
+  const { data: session, update } = useSession();
+
+  const { status, error } = useQuery({
     queryKey: ['upload-file-pda', pda.id, file.file, session?.token],
     queryFn: async () => {
       try {
@@ -43,7 +86,26 @@ export default function UploadModalUploadFiles({ file, pda }: Props) {
           throw new Error('Failed to upload file');
         }
 
-        return res.json();
+        const uploadedData: { id: string; url: string; status: string } =
+          await res.json();
+
+        await update({
+          type: 'pdas',
+          pdas: [
+            {
+              ...pda,
+              fileName: file.file.name,
+              mimeType: file.file.type,
+              size: file.file.size,
+              url: uploadedData.url,
+              status: uploadedData.status,
+              tags: [] as string[],
+              proofs: [] as any[],
+            },
+          ],
+        } as SessionUpdate);
+
+        return uploadedData;
       } catch (error) {
         console.error(error);
         throw error;
@@ -53,29 +115,54 @@ export default function UploadModalUploadFiles({ file, pda }: Props) {
   });
 
   useEffect(() => {
-    console.log(status, data, error);
-  }, [status, data, error]);
+    if (status === 'success') {
+      onFinished?.();
+    }
+  }, [status, onFinished]);
+
+  const icon =
+    status === 'loading' ? (
+      <LoadingIcon />
+    ) : status === 'success' ? (
+      <SuccessIcon />
+    ) : (
+      <ErrorIcon />
+    );
 
   return (
     <>
       <Typography variant="h4" mb={3}>
-        Uploading
+        Uploads
       </Typography>
       <Fragment key={file.file.name}>
-        <Stack direction={'row'} justifyContent={'space-between'}>
-          <FileDetail file={file} />
+        <Stack
+          direction={'row'}
+          justifyContent={'space-between'}
+          alignItems="center"
+        >
+          <FileDetail file={file} icon={icon} />
 
-          <Typography
-            variant="body1"
-            fontWeight={400}
-            sx={{ color: file.error ? '#8D3225' : '' }}
-          >
-            {numberToMoneyString(file.file.size * 0.000001)}
-          </Typography>
+          {status === 'success' && (
+            <Button
+              component={Link}
+              variant="contained"
+              size="small"
+              href={routes.dashboard.user.asset(pda.id)}
+            >
+              View
+            </Button>
+          )}
         </Stack>
-        <Box sx={{ width: '100%', mt: 1 }}>
-          <LinearProgress />
-        </Box>
+        {status === 'loading' && (
+          <Box sx={{ width: '100%', mt: 1 }}>
+            <LinearProgress />
+          </Box>
+        )}
+        {status === 'error' && (
+          <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+            {(error as any)?.message}
+          </Typography>
+        )}
       </Fragment>
     </>
   );
