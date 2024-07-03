@@ -1,7 +1,12 @@
+import { useState } from 'react';
+
 import ModalHeader from '@/components/modal/modal-header/modal-header';
 import ModalRight from '@/components/modal/modal-right/modal-right';
 import { formatBytes } from '@/utils/bytes';
 import { numberToMoneyString } from '@/utils/money';
+import { useMutation } from '@tanstack/react-query';
+
+import PersonIcon from '@mui/icons-material/Person';
 import {
   Button,
   Stack,
@@ -16,10 +21,9 @@ import {
   LinearProgress,
 } from '@mui/material';
 
-import PersonIcon from '@mui/icons-material/Person';
 import { FileType } from '../../page';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import PrepareUpdateQrCode from './prepare-upload-qr-code';
+import PrepareUploadQrCode from './prepare-upload-qr-code';
 
 type Props = {
   isOpen: boolean;
@@ -118,13 +122,22 @@ export default function UploadModal({
       <Typography variant="h4" mb={3}>
         {uploadingStarted ? 'Uploads' : 'Upload Summary'}
       </Typography>
-      <Stack direction={'column'} sx={{ mt: 2 }}>
-        {files.map((fileInfo, index) => (
+      {isOpen && (
+        <PrepareUploadQrCode
+          filename={files[0].file.name}
+          onPrepared={(pda) => {
+            console.log('PREPARED PDA', pda);
+          }}
+        />
+      )}
+
+      {/* <Stack direction={'column'} sx={{ mt: 2 }}>
+        {files.map((fileInfo) => (
           <>
             <Stack
               direction={'row'}
               justifyContent={'space-between'}
-              key={index}
+              key={fileInfo.file.name}
             >
               <Stack direction={'row'}>
                 <Avatar alt="Avatar" variant="rounded">
@@ -224,7 +237,7 @@ export default function UploadModal({
             </Button>
           </Box>
         </>
-      )}
+      )} */}
     </ModalRight>
   );
 }

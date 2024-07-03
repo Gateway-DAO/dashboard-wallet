@@ -1,15 +1,16 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+
+import FilePicker from '@/components/form/file-picker/file-picker';
 import TitleLayout from '@/components/title-layout/title-layout';
 import { pdas as pdasLocales } from '@/locale/en/pda';
+import { useToggle } from '@react-hookz/web';
 
 import { Box } from '@mui/system';
 
 import PDAsList from './components/pdas-list/pdas-list';
-import FilePicker from '@/components/form/file-picker/file-picker';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import { useToggle } from '@react-hookz/web';
 import UploadModal from './components/upload-modal/upload-modal';
 
 export type FileType = {
@@ -21,10 +22,9 @@ export type FileType = {
 };
 
 export default function AssetsPage() {
-  const session = useSession();
   const [isOpen, toggle] = useToggle();
   const [error, setError] = useState({ title: '', description: '' });
-  const [onFileUpload, setOnFileUpload] = useState<FileType[]>([]);
+  const [files, setOnFileUpload] = useState<FileType[]>([]);
 
   return (
     <>
@@ -39,7 +39,7 @@ export default function AssetsPage() {
       <UploadModal
         isOpen={isOpen}
         toggle={toggle}
-        files={onFileUpload}
+        files={files}
         error={error}
         onFileUpload={setOnFileUpload}
       />
