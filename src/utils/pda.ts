@@ -10,13 +10,7 @@ export enum FileType {
   other,
 }
 
-export const getFileTypeByMime = (pda: PrivateDataAsset) => {
-  if (pda.structured || !pda.mimeType) {
-    return FileType.pda;
-  }
-
-  const { mimeType } = pda;
-
+export const getFileTypeByMimeType = (mimeType: string) => {
   if (mimeType.includes('audio')) {
     return FileType.audio;
   } else if (mimeType.includes('image')) {
@@ -30,6 +24,16 @@ export const getFileTypeByMime = (pda: PrivateDataAsset) => {
   } else {
     return FileType.other;
   }
+};
+
+export const getFileTypeByPda = (pda: PrivateDataAsset) => {
+  if (pda.structured || !pda.mimeType) {
+    return FileType.pda;
+  }
+
+  const { mimeType } = pda;
+
+  return getFileTypeByMimeType(mimeType);
 };
 
 export const getIconFile = (file: FileType) => {

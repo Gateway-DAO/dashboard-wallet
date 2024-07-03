@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import React from 'react';
 
-import ModalTitle from '@/components/modal/modal-header/modal-header';
+import ModalHeader from '@/components/modal/modal-header/modal-header';
 import ModalRight from '@/components/modal/modal-right/modal-right';
 
 import UpdateQrCode from './update-qr-code';
@@ -19,7 +19,7 @@ export default function UpdateModal({ isOpen, toggleOpen }: Props) {
   return (
     <>
       <ModalRight open={isOpen} onClose={toggleOpen}>
-        <ModalTitle onClose={toggleOpen} />
+        <ModalHeader onClose={toggleOpen} />
         <UpdateQrCode isOpen={isOpen} onClose={toggleOpen} />
       </ModalRight>
     </>

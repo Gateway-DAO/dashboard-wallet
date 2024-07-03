@@ -4,11 +4,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { IconButton, Stack } from '@mui/material';
 
 type Props = {
-  onClose: () => void;
+  onClose?: () => void;
   children?: React.ReactNode;
 };
 
-export default function ModalTitle({ onClose, children }: Props) {
+export default function ModalHeader({ onClose, children }: Props) {
   return (
     <Stack
       sx={{
@@ -21,13 +21,15 @@ export default function ModalTitle({ onClose, children }: Props) {
       }}
     >
       {children}
-      <IconButton
-        aria-label="close"
-        sx={{ backgroundColor: 'action.hover' }}
-        onClick={() => onClose()}
-      >
-        <CloseIcon />
-      </IconButton>
+      {onClose && (
+        <IconButton
+          aria-label="close"
+          sx={{ backgroundColor: 'action.hover' }}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      )}
     </Stack>
   );
 }

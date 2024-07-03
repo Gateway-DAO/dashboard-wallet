@@ -4,7 +4,7 @@ import UserData from '@/app/(light)/dashboard/components/user-data/user-data';
 import { DataOutlinedIcon } from '@/components/icons';
 import { pda } from '@/locale/en/pda';
 import { Proof } from '@/services/protocol-v3/types';
-import { FileType, getFileTypeByMime, getIconFile } from '@/utils/pda';
+import { FileType, getFileTypeByPda, getIconFile } from '@/utils/pda';
 
 import { CheckOutlined } from '@mui/icons-material';
 import { Avatar, Box, Divider, Stack, Typography } from '@mui/material';
@@ -64,7 +64,7 @@ export default function ShareCopyFormSuccessfully({ proof }: Props) {
                 const name = data.structured
                   ? data.dataAsset?.title
                   : data.fileName;
-                const fileType = getFileTypeByMime(data);
+                const fileType = getFileTypeByPda(data);
                 const icon = getIconFile(fileType);
 
                 return (

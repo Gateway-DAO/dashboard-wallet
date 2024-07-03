@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ModalTitle from './modal-header';
+import ModalHeader from './modal-header';
 
-const meta: Meta<typeof ModalTitle> = {
+const meta: Meta<typeof ModalHeader> = {
   title: 'Components/Modals/Modal Title',
-  component: ModalTitle,
+  component: ModalHeader,
   parameters: {
     layout: 'centered',
   },
@@ -12,7 +12,7 @@ const meta: Meta<typeof ModalTitle> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ModalTitle>;
+type Story = StoryObj<typeof ModalHeader>;
 
 export const Playground: Story = {
   args: {
