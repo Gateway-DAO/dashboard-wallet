@@ -77,24 +77,22 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
           mt: !!error ? 2 : 10,
         })}
       >
-        <Stack direction="row" gap={2}>
-          <Stack direction={'row'} justifyContent={'space-between'}>
-            <Typography variant="body1" fontWeight={400}>
-              Total
+        <Stack direction={'row'} justifyContent={'space-between'} gap={2}>
+          <Typography variant="body1" fontWeight={400}>
+            Total
+          </Typography>
+          <Stack direction="row" gap={1}>
+            <Typography
+              fontSize={24}
+              sx={{
+                textDecoration: 'line-through',
+              }}
+            >
+              {numberToMoneyString(files[0]?.file?.size * 0.01)}
             </Typography>
-            <>
-              <Typography
-                fontSize={24}
-                sx={{
-                  textDecoration: 'line-through',
-                }}
-              >
-                {numberToMoneyString(files[0]?.file?.size * 0.01)}
-              </Typography>
-              <Tooltip title={'something'} arrow>
-                <Chip label={'Free'} color="success" />
-              </Tooltip>
-            </>
+            <Tooltip title={'something'} arrow>
+              <Chip label={'Free'} color="success" />
+            </Tooltip>
           </Stack>
         </Stack>
         <Button

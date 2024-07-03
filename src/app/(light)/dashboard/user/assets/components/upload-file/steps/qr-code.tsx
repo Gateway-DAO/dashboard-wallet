@@ -3,9 +3,13 @@ import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import GtwQRCode from '@/components/gtw-qr/gtw-qr-code';
+import GtwQrCodeContainer from '@/components/gtw-qr/gtw-qr-code-container';
 import LoadingQRCode from '@/components/gtw-qr/loading-qr-code';
+import { common_elements } from '@/locale/en/common-elements';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { Socket, io } from 'socket.io-client';
+
+import { Typography } from '@mui/material';
 
 type Props = {
   filename: string;
@@ -61,11 +65,19 @@ export default function UploadModalQrCode({ filename, onPrepared }: Props) {
 
   return (
     <>
-      {qrCodeData ? (
-        <GtwQRCode value={qrCodeData} ref={qrRef} />
-      ) : (
-        <LoadingQRCode />
-      )}
+      <Typography variant="h4" mb={1}>
+        Scan the QR code to
+        <br />
+        upload data
+      </Typography>
+      <Typography mb={3}>{common_elements.scan_message}</Typography>
+      <GtwQrCodeContainer>
+        {qrCodeData ? (
+          <GtwQRCode value={qrCodeData} ref={qrRef} />
+        ) : (
+          <LoadingQRCode />
+        )}
+      </GtwQrCodeContainer>
     </>
   );
 }
