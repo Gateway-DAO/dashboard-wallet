@@ -1,7 +1,7 @@
 import { NextAuthOptions } from 'next-auth';
 
 import routes from '@/constants/routes';
-import { SessionUpdate } from '@/types/session';
+import { UpdateSession } from '@/types/session';
 import { LoginSessionV3, SessionV3 } from '@/types/user';
 
 import getDecryptedData from './libs/get-decrypted-data';
@@ -25,7 +25,7 @@ export const nextAuthConfig: NextAuthOptions = {
       }
 
       if (trigger === 'update' && token && session?.type) {
-        const sessionUpdate: SessionUpdate = session;
+        const sessionUpdate: UpdateSession = session;
         if (!token.injectData) {
           token.injectData = { pdas: [], sharedPdas: [] };
         }
