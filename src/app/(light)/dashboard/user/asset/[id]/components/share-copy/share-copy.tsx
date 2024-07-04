@@ -10,7 +10,7 @@ import { Button } from '@mui/material';
 import { ShareCopyChooseUsername } from './share-copy-choose-username';
 import ShareCopyFormError from './share-copy-form-error';
 import ShareCopyFormSuccessfully from './share-copy-form-success';
-import ShareCopyQrCode from './share-copy-qr-code/share-copy-qr-code';
+import ShareCopyQrCode from './share-copy-qr-code';
 import { useShareCopyState } from './state';
 
 type Props = {
