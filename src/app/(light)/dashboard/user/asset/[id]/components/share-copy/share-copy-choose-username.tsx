@@ -77,7 +77,6 @@ export function ShareCopyChooseUsername({ onSelectUsername }: Props) {
                 type,
                 value,
               });
-              console.log(value, success);
               if (success) {
                 return onCheckUser({ type, value: event.target.value });
               }
