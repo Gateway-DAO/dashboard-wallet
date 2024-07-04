@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 
 import { onSaveSVG } from '@/utils/save-svg';
 import QRCode, { QRCodeProps } from 'react-qr-code';
@@ -7,11 +7,13 @@ const GtwQRCode = forwardRef(function GtwQRCode(
   props: Omit<QRCodeProps, 'ref'>,
   ref: any
 ) {
+  const qrRef = useRef<SVGElement>(null);
+
   return (
     <>
       <QRCode
         {...props}
-        ref={ref}
+        ref={ref ?? qrRef}
         viewBox="0 0 256 256"
         style={{
           height: 'auto',
@@ -20,7 +22,7 @@ const GtwQRCode = forwardRef(function GtwQRCode(
         }}
       />
       {process.env.NODE_ENV === 'development' && (
-        <button onClick={() => onSaveSVG(ref.current)}>Print</button>
+        <button onClick={() => onSaveSVG((ref ?? qrRef).current)}>Print</button>
       )}
     </>
   );
