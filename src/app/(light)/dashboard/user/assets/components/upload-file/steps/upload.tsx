@@ -6,11 +6,10 @@ import { Fragment, useEffect } from 'react';
 import { FileType } from '@/components/form/file-picker/types';
 import routes from '@/constants/routes';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
-import { SessionUpdate } from '@/types/session';
-import { numberToMoneyString } from '@/utils/money';
+import { UpdateSession } from '@/types/session';
 import { useQuery } from '@tanstack/react-query';
 
-import { Check, ErrorOutline, Sync, X } from '@mui/icons-material';
+import { Check, ErrorOutline, Sync } from '@mui/icons-material';
 import { Avatar, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { Stack, alpha } from '@mui/system';
 
@@ -103,7 +102,7 @@ export default function UploadModalUploadFiles({
               proofs: [] as any[],
             },
           ],
-        } as SessionUpdate);
+        } as UpdateSession);
 
         return uploadedData;
       } catch (error) {

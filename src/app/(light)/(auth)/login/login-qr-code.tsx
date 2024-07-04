@@ -116,6 +116,7 @@ export default function LoginQrCode() {
       if (socketTimeoutRef.current) {
         clearInterval(socketTimeoutRef.current);
       }
+      socketRef.current?.disconnect();
     };
   }, [isDesktop, initializeSocket]);
 

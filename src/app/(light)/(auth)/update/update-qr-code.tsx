@@ -57,6 +57,9 @@ export default function UpdateQrCode() {
     if (isDesktop) {
       initializeSocket();
     }
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, [isDesktop, initializeSocket]);
 
   return (

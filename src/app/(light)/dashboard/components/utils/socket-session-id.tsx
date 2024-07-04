@@ -55,6 +55,9 @@ export default function UtilsSocketSessionId({
     if (!id || !socketRef.current?.connected) {
       initializeSocket();
     }
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, [id, initializeSocket]);
 
   return (
