@@ -96,6 +96,9 @@ export default function UpdateQrCode({ isOpen, onClose }: Props) {
       setIsMounted(true);
       initializeSocket();
     }
+    return () => {
+      socketRef.current?.disconnect();
+    };
   }, [isOpen, isMounted, initializeSocket]);
 
   return (
