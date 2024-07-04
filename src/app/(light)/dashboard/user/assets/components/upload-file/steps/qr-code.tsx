@@ -31,7 +31,7 @@ export default function UploadModalQrCode({ filename, onPrepared }: Props) {
     socketRef.current = io(`${process.env.NEXT_PUBLIC_BFF_API_SERVER}user`, {
       extraHeaders: {
         Authorization: `Bearer ${session.data?.token}`,
-        'connection-type': 'update',
+        'connection-type': 'upload',
       },
     });
 
