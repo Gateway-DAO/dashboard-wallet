@@ -71,6 +71,7 @@ export const columns: GridColDef<ListPrivateDataAsset>[] = [
             name={issuer.did}
             alt={issuer.username}
             src={issuer.image}
+            size={32}
           />
           <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
             {issuer.username ?? limitCharsCentered(issuer.did, 10)}
