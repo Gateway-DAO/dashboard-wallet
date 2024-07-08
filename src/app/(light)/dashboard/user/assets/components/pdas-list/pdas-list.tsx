@@ -82,6 +82,19 @@ export default function PDAsList() {
           } satisfies SessionUpdate);
         }}
       /> */}
+      {isLoading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: {
+              xs: 0,
+              lg: '300px',
+            },
+            width: '100%',
+          }}
+        />
+      )}
       <DataGrid
         {...defaultGridConfiguration}
         rows={pdas}
@@ -91,11 +104,7 @@ export default function PDAsList() {
             paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        slots={{
-          loadingOverlay: LinearProgress,
-        }}
         paginationMode="client"
-        loading={isLoading}
         onRowClick={(params: GridRowParams<ListPrivateDataAsset>, event) => {
           const isUpdate = params.row.new;
           if (!isUpdate) {
