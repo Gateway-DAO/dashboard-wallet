@@ -5,7 +5,7 @@ import { useRouter } from 'next-nprogress-bar';
 
 import {
   defaultGridConfiguration,
-  gridWithoutNegativeMargin,
+  defaultGridCustomization,
 } from '@/components/data-grid/grid-default';
 import routes from '@/constants/routes';
 import { shared } from '@/locale/en/shared';
@@ -68,7 +68,9 @@ export default function SharedList({ pdas }: Props) {
           toggleOpen();
         }}
         pageSizeOptions={[5, 10]}
-        sx={gridWithoutNegativeMargin}
+        sx={{
+          ...defaultGridCustomization,
+        }}
       />
       {!isLoading && !pdas.length && (
         <Typography

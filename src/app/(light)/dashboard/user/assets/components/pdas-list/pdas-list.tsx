@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 import {
   defaultGridConfiguration,
-  gridWithoutNegativeMargin,
+  defaultGridCustomization,
 } from '@/components/data-grid/grid-default';
 import routes from '@/constants/routes';
 import { pdas as pdasLocales } from '@/locale/en/pda';
@@ -87,7 +87,7 @@ export default function PDAsList() {
         onRowClick={(params: GridRowParams<ListPrivateDataAsset>, event) => {
           const isUpdate = params.row.new;
           if (!isUpdate) {
-            // if middle click open new tab
+            // if middle click open new tabdefaultGridCustomization
             if (event.button === 1) {
               return window.open(routes.dashboard.user.asset(params.id));
             }
@@ -97,7 +97,9 @@ export default function PDAsList() {
           toggleOpen();
         }}
         pageSizeOptions={[5, 10]}
-        sx={gridWithoutNegativeMargin}
+        sx={{
+          ...defaultGridCustomization,
+        }}
       />
       {!isLoading && !pdas.length && (
         <Typography
