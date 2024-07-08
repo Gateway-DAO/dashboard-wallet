@@ -5,7 +5,7 @@ import { limitCharsCentered } from '@/utils/string';
 import { FileDownload } from '@mui/icons-material';
 import { Stack, Box, IconButton, Typography } from '@mui/material';
 
-import ShareCopy from './share-copy/share-copy';
+import ShareCopy from './share-copy';
 import PDATabs from './tabs/pda-tabs';
 
 type Props = {

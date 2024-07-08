@@ -18,7 +18,7 @@ type Props = {
   onSelectUsername: (data: IdentifierValueSchema) => void;
 };
 
-export function ShareCopyChooseUsername({ onSelectUsername }: Props) {
+export function SharePdaChooseUsername({ onSelectUsername }: Props) {
   const { control, handleSubmit, clearErrors } = useForm<IdentifierValueSchema>(
     {
       resolver: zodResolver(identifierValueSchema),

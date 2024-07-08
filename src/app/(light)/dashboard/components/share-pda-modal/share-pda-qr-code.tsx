@@ -28,7 +28,7 @@ type Props = {
   onError: (error: string) => void;
 };
 
-export default function ShareCopyQrCode({
+export default function SharePdaQrCode({
   identification,
   pda,
   onError,
@@ -120,37 +120,6 @@ export default function ShareCopyQrCode({
       <GtwQrCodeContainer>
         {qrCodeData ? <GtwQRCode value={qrCodeData} /> : <LoadingQRCode />}
       </GtwQrCodeContainer>
-      <p>{qrCodeData}</p>
-      <button
-        type="button"
-        onClick={() => {
-          onSuccess({
-            verifier: {
-              did: 'did:gatewayId:H2RVfDAhudKFczTJgo4aPCCqafelmcIX4W5H:hwrmbGnvFWHEozktwUgfKOfHyHpPhfGk0j3J1GyTOY0Jzgz',
-              username: 'testuser',
-            },
-            data: [
-              {
-                id: 123213213213,
-                dataAsset: {
-                  title: 'Abc',
-                },
-                structured: true,
-              } as PartialDeep<PrivateDataAsset>,
-              {
-                id: 1433,
-                fileName: 'test.pdf',
-                mimeType: 'application/pdf',
-              } as PartialDeep<PrivateDataAsset>,
-            ] satisfies PartialDeep<PrivateDataAsset>[] as any,
-          } satisfies PartialDeep<Proof> as Proof);
-        }}
-      >
-        onSuccess
-      </button>
-      <button type="button" onClick={() => onError('error')}>
-        onError
-      </button>
     </>
   );
 }

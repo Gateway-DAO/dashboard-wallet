@@ -7,7 +7,7 @@ type Props = {
   error: string;
 };
 
-export default function ShareCopyFormError({ error }: Props) {
+export default function SharePdaFormError({ error }: Props) {
   return (
     <>
       <Stack>

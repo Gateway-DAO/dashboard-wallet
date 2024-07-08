@@ -22,7 +22,7 @@ export type Action =
   | { type: 'success'; proof: Proof }
   | { type: 'error'; error: string };
 
-export function shareCopyState(state: State, action: Action): State {
+export function sharePdaState(state: State, action: Action): State {
   switch (action.type) {
     case 'open':
       return { status: 'open' };
@@ -39,8 +39,8 @@ export function shareCopyState(state: State, action: Action): State {
   }
 }
 
-export function useShareCopyState() {
-  const [state, dispatch] = useReducer(shareCopyState, initialState);
+export function useSharePdaState() {
+  const [state, dispatch] = useReducer(sharePdaState, initialState);
   const onOpen = () => dispatch({ type: 'open' });
   const onClose = () => dispatch({ type: 'close' });
   const onQrCode = (identifier: IdentifierValueSchema) =>
@@ -57,3 +57,5 @@ export function useShareCopyState() {
     onError,
   };
 }
+
+export type UseSharePdaState = ReturnType<typeof useSharePdaState>;
