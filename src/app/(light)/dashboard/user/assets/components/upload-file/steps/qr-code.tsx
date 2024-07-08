@@ -21,7 +21,6 @@ export default function UploadModalQrCode({ filename, onPrepared }: Props) {
   const session = useSession();
   const [qrCodeData, setQrCodeData] = useState<string | undefined>();
   const [isMounted, setIsMounted] = useState(false);
-  const qrRef = useRef<SVGElement>(null);
 
   const initializeSocket = useCallback(() => {
     if (socketRef.current) {
@@ -72,11 +71,7 @@ export default function UploadModalQrCode({ filename, onPrepared }: Props) {
       </Typography>
       <Typography mb={3}>{common_elements.scan_message}</Typography>
       <GtwQrCodeContainer>
-        {qrCodeData ? (
-          <GtwQRCode value={qrCodeData} ref={qrRef} />
-        ) : (
-          <LoadingQRCode />
-        )}
+        {qrCodeData ? <GtwQRCode value={qrCodeData} /> : <LoadingQRCode />}
       </GtwQrCodeContainer>
     </>
   );
