@@ -2,8 +2,9 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next-nprogress-bar';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
+import { SharePdaProvider } from '@/app/(light)/dashboard/components/share-pda-modal/state';
 import {
   defaultGridConfiguration,
   defaultGridCustomization,
@@ -11,6 +12,7 @@ import {
 import routes from '@/constants/routes';
 import { pdas as pdasLocales } from '@/locale/en/pda';
 import { api } from '@/services/protocol-v3/api';
+import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { useToggle } from '@react-hookz/web';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,12 +22,17 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 
 import UpdateModal from '../../../../components/update-modal/update-modal';
 import { columns } from './columns';
+import ShareCopy from './share-copy';
 import { ListPrivateDataAsset } from './types';
 
+// TODO: Merge with SharedList
 export default function PDAsList() {
-  const { data: sessionData, status, update } = useSession();
+  const { data: sessionData, status } = useSession();
   const router = useRouter();
-  const [isOpen, toggleOpen] = useToggle(false);
+  const [isUpdateOpen, toggleOpenUpdate] = useToggle(false);
+  const [isShareOpen, toggleOpenShare] = useState<
+    PrivateDataAsset | undefined
+  >();
 
   const { data, isLoading: isFetchingLatestPdas } = useQuery({
     queryKey: ['pdas', sessionData],
@@ -35,6 +42,11 @@ export default function PDAsList() {
     },
     enabled: !!sessionData?.token,
   });
+
+  const renderedColumns = useMemo(
+    () => columns({ onShare: toggleOpenShare }),
+    [columns]
+  );
 
   const pdas: ListPrivateDataAsset[] = useMemo(() => {
     if (!sessionData?.pdas) return [];
@@ -70,31 +82,40 @@ export default function PDAsList() {
           } satisfies SessionUpdate);
         }}
       /> */}
+      {isLoading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: {
+              xs: 0,
+              lg: '300px',
+            },
+            width: '100%',
+          }}
+        />
+      )}
       <DataGrid
         {...defaultGridConfiguration}
         rows={pdas}
-        columns={columns}
+        columns={renderedColumns}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        slots={{
-          loadingOverlay: LinearProgress,
-        }}
         paginationMode="client"
-        loading={isLoading}
         onRowClick={(params: GridRowParams<ListPrivateDataAsset>, event) => {
           const isUpdate = params.row.new;
-          if (!isUpdate) {
-            // if middle click open new tabdefaultGridCustomization
-            if (event.button === 1) {
-              return window.open(routes.dashboard.user.asset(params.id));
-            }
-
-            return router.push(routes.dashboard.user.asset(params.id));
+          if (isUpdate) {
+            return toggleOpenUpdate();
           }
-          toggleOpen();
+          // if middle click open new tab
+          if (event.button === 1) {
+            return window.open(routes.dashboard.user.asset(params.id));
+          }
+
+          return router.push(routes.dashboard.user.asset(params.id));
         }}
         pageSizeOptions={[5, 10]}
         sx={{
@@ -110,7 +131,10 @@ export default function PDAsList() {
           {pdasLocales.empty}
         </Typography>
       )}
-      <UpdateModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <UpdateModal isOpen={isUpdateOpen} toggleOpen={toggleOpenUpdate} />
+      <SharePdaProvider>
+        <ShareCopy pda={isShareOpen} />
+      </SharePdaProvider>
     </>
   );
 }

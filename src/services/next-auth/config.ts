@@ -26,9 +26,6 @@ export const nextAuthConfig: NextAuthOptions = {
 
       if (trigger === 'update' && token && session?.type) {
         const sessionUpdate: UpdateSession = session;
-        if (!token.injectData) {
-          token.injectData = { pdas: [], sharedPdas: [] };
-        }
 
         switch (sessionUpdate?.type) {
           case 'pdas':
