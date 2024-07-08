@@ -107,15 +107,15 @@ export default function PDAsList() {
         paginationMode="client"
         onRowClick={(params: GridRowParams<ListPrivateDataAsset>, event) => {
           const isUpdate = params.row.new;
-          if (!isUpdate) {
-            // if middle click open new tab
-            if (event.button === 1) {
-              return window.open(routes.dashboard.user.asset(params.id));
-            }
-
-            return router.push(routes.dashboard.user.asset(params.id));
+          if (isUpdate) {
+            return toggleOpenUpdate();
           }
-          toggleOpenUpdate();
+          // if middle click open new tab
+          if (event.button === 1) {
+            return window.open(routes.dashboard.user.asset(params.id));
+          }
+
+          return router.push(routes.dashboard.user.asset(params.id));
         }}
         pageSizeOptions={[5, 10]}
         sx={gridWithoutNegativeMargin}
