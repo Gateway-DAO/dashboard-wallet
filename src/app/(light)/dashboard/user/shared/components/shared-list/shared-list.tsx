@@ -65,6 +65,18 @@ export default function SharedList() {
     ];
   }, [data?.receivedProofs]);
 
+  if (!isLoading && !pdas.length) {
+    return (
+      <Typography
+        variant="body1"
+        color="text.secondary"
+        sx={{ textAlign: 'center', width: '100%', pt: 18 }}
+      >
+        {shared.empty}
+      </Typography>
+    );
+  }
+
   return (
     <>
       {isLoading && (
@@ -106,15 +118,6 @@ export default function SharedList() {
           ...defaultGridCustomization,
         }}
       />
-      {!isLoading && !pdas.length && (
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          sx={{ textAlign: 'center', width: '100%' }}
-        >
-          {shared.empty}
-        </Typography>
-      )}
       <UpdateModal isOpen={isUpdateOpen} toggleOpen={toggleOpenUpdate} />
     </>
   );
