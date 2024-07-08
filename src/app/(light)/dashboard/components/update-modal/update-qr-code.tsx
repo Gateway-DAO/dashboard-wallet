@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import GtwQRCode from '@/components/gtw-qr/gtw-qr-code';
 import LoadingQRCode from '@/components/gtw-qr/loading-qr-code';
 import { LoginSessionV3 } from '@/types/user';
-import { onSaveSVG } from '@/utils/save-svg';
 import { useMutation } from '@tanstack/react-query';
 import { Socket, io } from 'socket.io-client';
 
@@ -26,7 +25,6 @@ export default function UpdateQrCode({ isOpen, onClose }: Props) {
   const session = useSession();
   const [qrCodeData, setQrCodeData] = useState<string | undefined>();
   const [isMounted, setIsMounted] = useState(false);
-  const qrRef = useRef<SVGElement>(null);
 
   const update = useMutation({
     mutationKey: ['update'],
@@ -85,7 +83,7 @@ export default function UpdateQrCode({ isOpen, onClose }: Props) {
       update.mutate({ token, privateKey });
     });
 
-    socketRef.current.on('disconnect', (e) => {
+    socketRef.current.on('disconnect', () => {
       console.log(`[socket] disconnected`);
       setQrCodeData(undefined);
     });
@@ -103,11 +101,7 @@ export default function UpdateQrCode({ isOpen, onClose }: Props) {
 
   return (
     <>
-      {qrCodeData ? (
-        <GtwQRCode value={qrCodeData} ref={qrRef} />
-      ) : (
-        <LoadingQRCode />
-      )}
+      {qrCodeData ? <GtwQRCode value={qrCodeData} /> : <LoadingQRCode />}
       <Dialog open={update.isLoading} fullWidth maxWidth="xs">
         <DialogTitle>
           <CircularProgress color="primary" size={18} /> Updating...
