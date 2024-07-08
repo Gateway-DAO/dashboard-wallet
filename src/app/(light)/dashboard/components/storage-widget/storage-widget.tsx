@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 
+import { MAX_FILE_USER_STORAGE } from '@/constants/file-upload';
 import { convertBytes, formatBytes } from '@/utils/bytes';
 import { useToggle } from '@react-hookz/web';
 
@@ -15,7 +16,6 @@ import {
 } from '@mui/material';
 
 import StorageModal from './storage-modal';
-import { MAX_FILE_USER_STORAGE } from '@/constants/file-upload';
 
 export default function StorageWidget() {
   const [isOpen, toggle] = useToggle();
@@ -50,6 +50,7 @@ export default function StorageWidget() {
               sx={{
                 position: 'absolute',
                 zIndex: 2,
+                color: 'primary.dark',
                 circle: {
                   strokeLinecap: 'round',
                 },
@@ -71,6 +72,7 @@ export default function StorageWidget() {
               variant="caption"
               color="primary.dark"
               fontWeight="bold"
+              fontSize={16}
             >
               {convertBytes(
                 session.data?.user.totalFileSize ?? 0,
@@ -81,6 +83,7 @@ export default function StorageWidget() {
                 color="primary.dark"
                 fontWeight="lighter"
                 variant="caption"
+                fontSize={16}
                 sx={{
                   opacity: 0.45,
                 }}
@@ -95,7 +98,7 @@ export default function StorageWidget() {
           fullWidth
           variant="outlined"
           size="small"
-          sx={{ mt: 1 }}
+          sx={{ mt: 1, color: 'primary.dark' }}
         >
           Upgrade
         </Button>
