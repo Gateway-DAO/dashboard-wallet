@@ -69,7 +69,7 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
         </Alert>
       )}
 
-      <Box
+      <Stack
         sx={(theme) => ({
           backgroundColor: alpha(
             theme.palette.primary.main,
@@ -78,14 +78,16 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
           borderRadius: theme.shape.borderRadius / 16, //Strange issue with MUI
           p: 2,
           textAlign: 'left',
+          justifyContent: 'space-between',
           mt: !!error ? 2 : 10,
+          gap: 3,
         })}
       >
         <Stack direction={'row'} justifyContent={'space-between'} gap={2}>
-          <Typography variant="body1" fontWeight={400}>
+          <Typography variant="body1" fontWeight={400} color="text.secondary">
             Total
           </Typography>
-          <Stack direction="row" gap={1}>
+          <Stack direction="row" gap={2}>
             <Typography
               fontSize={24}
               sx={{
@@ -104,12 +106,12 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
           fullWidth
           variant="contained"
           size="small"
-          sx={{ mt: 1 }}
+          sx={{ mt: 1, height: 56, fontSize: 15 }}
           disabled={!!error}
         >
           Upload
         </Button>
-      </Box>
+      </Stack>
     </>
   );
 }
