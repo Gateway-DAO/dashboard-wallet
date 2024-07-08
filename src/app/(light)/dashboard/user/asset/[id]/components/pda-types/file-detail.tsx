@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { WIDTH_CENTERED } from '@/theme/config/style-tokens';
 
-import { Box, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 export default function FileDetail() {
   return (
@@ -19,25 +19,24 @@ export default function FileDetail() {
         width: '100%',
       }}
     >
-      <Box
+      <Stack
         sx={{
-          aspectRatio: '570/550',
-          position: 'relative',
-          maxWidth: 570,
+          maxWidth: '100%',
           height: '100%',
+          backgroundColor: 'rgba(119, 26, 201, 0.12)',
+          borderRadius: 2,
+          minHeight: 566,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Image
-          style={{
-            objectFit: 'contain',
-            aspectRatio: '16/9',
-          }}
-          fill
-          className="feature-img"
-          src={'/images/static-file.png'}
-          alt={'static-file-image'}
+          width={144}
+          height={180}
+          src={'/images/file-icon.png'}
+          alt={'static-file-icon'}
         />
-      </Box>
+      </Stack>
     </Stack>
   );
 }
