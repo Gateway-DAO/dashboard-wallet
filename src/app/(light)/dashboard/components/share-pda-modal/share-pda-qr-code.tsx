@@ -73,7 +73,6 @@ export default function SharePdaQrCode({
     socketRef.current.on(
       'shared',
       async ({ pda, proofId }: { pda: PrivateDataAsset; proofId: string }) => {
-        console.log(pda);
         if (pda.proofs?.length === 0) {
           onError('Error on receiving shared data');
           return;
@@ -89,10 +88,13 @@ export default function SharePdaQrCode({
           session.data &&
           proof.verifier.did === session.data.user.did
         ) {
-          session.update({
+          console.log(pda);
+
+          await session.update({
             type: 'shared',
             pdas: [pda],
           } as UpdateSession);
+          console.log('updated');
         }
 
         proof.data = [pda];
