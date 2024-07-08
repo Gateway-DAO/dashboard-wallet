@@ -11,6 +11,7 @@ import { FileType, getFileTypeByPda, getIconFile } from '@/utils/pda';
 import { limitCharsCentered } from '@/utils/string';
 import dayjs from 'dayjs';
 
+import { IosShare } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Stack, Typography } from '@mui/material';
 import {
@@ -19,19 +20,22 @@ import {
   renderActionsCell,
 } from '@mui/x-data-grid';
 
-export const columns: GridColDef<PrivateDataAsset>[] = [
+import { ListPrivateDataAsset } from '../../../assets/components/pdas-list/types';
+
+export const columns: GridColDef<ListPrivateDataAsset>[] = [
   {
     field: 'name',
     headerName: pdaTableColumnNames.name,
     flex: 2,
     renderCell: (params) => {
       let name = '****';
-      if (params.row.structured && params.row.dataAsset?.title) {
-        name = params.row.dataAsset.title;
-      } else if (params.row.fileName) {
-        name = params.row.fileName;
+      if (!params.row.new) {
+        if (params.row.structured && params.row.dataAsset?.title) {
+          name = params.row.dataAsset.title;
+        } else if (params.row.fileName) {
+          name = params.row.fileName;
+        }
       }
-
       const fileType = getFileTypeByPda(params.row);
       const icon = getIconFile(fileType);
 
@@ -91,33 +95,33 @@ export const columns: GridColDef<PrivateDataAsset>[] = [
     valueFormatter: (params) =>
       params.value ? dayjs(params.value).format(DATE_FORMAT) : '',
   },
-  {
-    field: 'action',
-    type: 'actions',
-    renderCell(params) {
-      if (params.row.structured) return null;
+  // {
+  //   field: 'action',
+  //   type: 'actions',
+  //   // renderCell(params) {
+  //   //   if (params.row.structured) return null;
 
-      return renderActionsCell(params);
-    },
-    getActions: () => [
-      // <GridActionsCellItem
-      //   key={1}
-      //   label="Share"
-      //   icon={<IosShareIcon />}
-      //   showInMenu
-      // />,
-      <GridActionsCellItem
-        label="Download"
-        key={2}
-        icon={<DownloadIcon />}
-        showInMenu
-      />,
-      // <GridActionsCellItem
-      //   key={3}
-      //   label="Archive"
-      //   icon={<ArchiveIcon />}
-      //   showInMenu
-      // />,
-    ],
-  },
+  //   //   return renderActionsCell(params);
+  //   // },
+  //   getActions: () => [
+  //     <GridActionsCellItem
+  //       key={1}
+  //       label="Share"
+  //       icon={<IosShare />}
+  //       showInMenu
+  //     />,
+  //     // <GridActionsCellItem
+  //     //   label="Download"
+  //     //   key={2}
+  //     //   icon={<DownloadIcon />}
+  //     //   showInMenu
+  //     // />,
+  //     // <GridActionsCellItem
+  //     //   key={3}
+  //     //   label="Archive"
+  //     //   icon={<ArchiveIcon />}
+  //     //   showInMenu
+  //     // />,
+  //   ],
+  // },
 ];
