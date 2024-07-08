@@ -8,20 +8,14 @@ import { SharePdaChooseUsername } from './share-pda-choose-username';
 import SharePdaFormError from './share-pda-form-error';
 import SharePdaFormSuccessfully from './share-pda-form-success';
 import SharePdaQrCode from './share-pda-qr-code';
-import { UseSharePdaState } from './state';
+import { useSharePdaState } from './state';
 
 type Props = {
   pda: PrivateDataAsset;
 };
 
-export default function SharePda({
-  pda,
-  state,
-  onClose,
-  onError,
-  onQrCode,
-  onSuccess,
-}: Props & UseSharePdaState) {
+export default function SharePda({ pda }: Props) {
+  const { state, onClose, onQrCode, onSuccess, onError } = useSharePdaState();
   return (
     <ModalRight open={state.status !== 'closed'} onClose={onClose}>
       <ModalHeader onClose={onClose} />

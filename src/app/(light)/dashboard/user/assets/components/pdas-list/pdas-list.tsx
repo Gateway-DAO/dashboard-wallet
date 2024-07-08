@@ -2,8 +2,9 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next-nprogress-bar';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
+import { SharePdaProvider } from '@/app/(light)/dashboard/components/share-pda-modal/state';
 import {
   defaultGridConfiguration,
   gridWithoutNegativeMargin,
@@ -11,6 +12,7 @@ import {
 import routes from '@/constants/routes';
 import { pdas as pdasLocales } from '@/locale/en/pda';
 import { api } from '@/services/protocol-v3/api';
+import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { useToggle } from '@react-hookz/web';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,12 +22,17 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 
 import UpdateModal from '../../../../components/update-modal/update-modal';
 import { columns } from './columns';
+import ShareCopy from './share-copy';
 import { ListPrivateDataAsset } from './types';
 
+// TODO: Merge with SharedList
 export default function PDAsList() {
-  const { data: sessionData, status, update } = useSession();
+  const { data: sessionData, status } = useSession();
   const router = useRouter();
-  const [isOpen, toggleOpen] = useToggle(false);
+  const [isUpdateOpen, toggleOpenUpdate] = useToggle(false);
+  const [isShareOpen, toggleOpenShare] = useState<
+    PrivateDataAsset | undefined
+  >();
 
   const { data, isLoading: isFetchingLatestPdas } = useQuery({
     queryKey: ['pdas', sessionData],
@@ -35,6 +42,11 @@ export default function PDAsList() {
     },
     enabled: !!sessionData?.token,
   });
+
+  const renderedColumns = useMemo(
+    () => columns({ onShare: toggleOpenShare }),
+    [columns]
+  );
 
   const pdas: ListPrivateDataAsset[] = useMemo(() => {
     if (!sessionData?.pdas) return [];
@@ -73,7 +85,7 @@ export default function PDAsList() {
       <DataGrid
         {...defaultGridConfiguration}
         rows={pdas}
-        columns={columns}
+        columns={renderedColumns}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 10 },
@@ -94,7 +106,7 @@ export default function PDAsList() {
 
             return router.push(routes.dashboard.user.asset(params.id));
           }
-          toggleOpen();
+          toggleOpenUpdate();
         }}
         pageSizeOptions={[5, 10]}
         sx={gridWithoutNegativeMargin}
@@ -108,7 +120,10 @@ export default function PDAsList() {
           {pdasLocales.empty}
         </Typography>
       )}
-      <UpdateModal isOpen={isOpen} toggleOpen={toggleOpen} />
+      <UpdateModal isOpen={isUpdateOpen} toggleOpen={toggleOpenUpdate} />
+      <SharePdaProvider>
+        <ShareCopy pda={isShareOpen} />
+      </SharePdaProvider>
     </>
   );
 }

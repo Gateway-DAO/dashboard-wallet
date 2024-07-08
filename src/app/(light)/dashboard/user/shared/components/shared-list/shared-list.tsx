@@ -24,7 +24,7 @@ import { columns } from './columns';
 type Props = {
   pdas: PrivateDataAsset[];
 };
-
+// TODO: Merge with PDAsList
 export default function SharedList({ pdas }: Props) {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
