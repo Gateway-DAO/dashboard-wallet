@@ -88,13 +88,10 @@ export default function SharePdaQrCode({
           session.data &&
           proof.verifier.did === session.data.user.did
         ) {
-          console.log(pda);
-
           await session.update({
             type: 'shared',
             pdas: [pda],
           } as UpdateSession);
-          console.log('updated');
         }
 
         proof.data = [pda];
