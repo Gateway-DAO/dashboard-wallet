@@ -84,6 +84,17 @@ export default function ShareCopyQrCode({
           return;
         }
 
+        if (
+          proof.verifier &&
+          session.data &&
+          proof.verifier.did === session.data.user.did
+        ) {
+          session.update({
+            type: 'shared',
+            pdas: [pda],
+          } as UpdateSession);
+        }
+
         proof.data = [pda];
 
         onSuccess(proof);
