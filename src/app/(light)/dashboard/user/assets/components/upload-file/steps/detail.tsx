@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 
 import { FileType } from '@/components/form/file-picker/types';
 import { getFileError } from '@/components/form/file-picker/utils';
+import { FILE_SIZE_PRICE } from '@/constants/file-upload';
 import { numberToMoneyString } from '@/utils/money';
 
 import {
@@ -27,6 +28,9 @@ type Props = {
 
 export default function UploadModalDetail({ files, onUpload }: Props) {
   const error = files?.[0]?.error ? getFileError(files[0].error) : undefined;
+  const fileSizeNumber = files[0]?.file?.size / 1024 / 1024;
+  const filePrice = fileSizeNumber * FILE_SIZE_PRICE;
+  const price = filePrice >= 0.01 ? filePrice : 0.01;
 
   return (
     <>
@@ -44,7 +48,7 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
                 fontWeight={400}
                 sx={{ color: fileInfo.error ? '#8D3225' : '' }}
               >
-                {numberToMoneyString(fileInfo.file.size * 0.000001)}
+                {numberToMoneyString(price)}
               </Typography>
             </Stack>
             {fileInfo.pending ? (
@@ -88,7 +92,7 @@ export default function UploadModalDetail({ files, onUpload }: Props) {
                 textDecoration: 'line-through',
               }}
             >
-              {numberToMoneyString(files[0]?.file?.size * 0.01)}
+              {numberToMoneyString(price)}
             </Typography>
             <Tooltip title={'something'} arrow>
               <Chip label={'Free'} color="success" />

@@ -11,7 +11,7 @@ export const getFileError = (error?: FileError) => {
       return {
         title: 'Limit Excedded',
         description:
-          'For now, only files up to 30 MB are allowed to be uploaded.',
+          'For now, only files up to 15 MB are allowed to be uploaded.',
       };
     case FileError.INSUFFICIENT_STORAGE:
       return {
