@@ -42,6 +42,19 @@ export default function SharedList({ pdas }: Props) {
 
   return (
     <>
+      {isLoading && (
+        <LinearProgress
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: {
+              xs: 0,
+              lg: '300px',
+            },
+            width: '100%',
+          }}
+        />
+      )}
       <DataGrid
         {...defaultGridConfiguration}
         rows={pdas}
@@ -51,10 +64,6 @@ export default function SharedList({ pdas }: Props) {
             paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        slots={{
-          loadingOverlay: LinearProgress,
-        }}
-        loading={isLoading}
         onRowClick={(params: GridRowParams<PrivateDataAsset>, event) => {
           const isUpdate = !(params.row.dataAsset || params.row.fileName);
           if (!isUpdate) {
