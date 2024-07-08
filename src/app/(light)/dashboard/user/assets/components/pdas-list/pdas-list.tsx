@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react';
 import { SharePdaProvider } from '@/app/(light)/dashboard/components/share-pda-modal/state';
 import {
   defaultGridConfiguration,
-  gridWithoutNegativeMargin,
+  defaultGridCustomization,
 } from '@/components/data-grid/grid-default';
 import routes from '@/constants/routes';
 import { pdas as pdasLocales } from '@/locale/en/pda';
@@ -118,7 +118,9 @@ export default function PDAsList() {
           return router.push(routes.dashboard.user.asset(params.id));
         }}
         pageSizeOptions={[5, 10]}
-        sx={gridWithoutNegativeMargin}
+        sx={{
+          ...defaultGridCustomization,
+        }}
       />
       {!isLoading && !pdas.length && (
         <Typography

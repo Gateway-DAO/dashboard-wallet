@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 import {
   defaultGridConfiguration,
-  gridWithoutNegativeMargin,
+  defaultGridCustomization,
 } from '@/components/data-grid/grid-default';
 import routes from '@/constants/routes';
 import { shared } from '@/locale/en/shared';
@@ -102,7 +102,9 @@ export default function SharedList() {
           return router.push(routes.dashboard.user.sharedData(params.id));
         }}
         pageSizeOptions={[5, 10]}
-        sx={gridWithoutNegativeMargin}
+        sx={{
+          ...defaultGridCustomization,
+        }}
       />
       {!isLoading && !pdas.length && (
         <Typography
