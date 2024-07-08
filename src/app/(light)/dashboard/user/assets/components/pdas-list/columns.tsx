@@ -10,17 +10,19 @@ import { FileType, getFileTypeByPda, getIconFile } from '@/utils/pda';
 import { limitCharsCentered } from '@/utils/string';
 import dayjs from 'dayjs';
 
-import DownloadIcon from '@mui/icons-material/Download';
+import { IosShare } from '@mui/icons-material';
 import { Stack, Typography } from '@mui/material';
-import {
-  GridActionsCellItem,
-  GridColDef,
-  renderActionsCell,
-} from '@mui/x-data-grid';
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 import { ListPrivateDataAsset } from './types';
 
-export const columns: GridColDef<ListPrivateDataAsset>[] = [
+type Actions = {
+  onShare: (pda: ListPrivateDataAsset) => void;
+};
+
+export const columns = ({
+  onShare,
+}: Actions): GridColDef<ListPrivateDataAsset>[] => [
   {
     field: 'name',
     headerName: pdaTableColumnNames.name,
@@ -79,15 +81,15 @@ export const columns: GridColDef<ListPrivateDataAsset>[] = [
       );
     },
   },
-  // {
-  //   field: 'sharing',
-  //   headerName: pdaTableColumnNames.sharing,
-  //   renderCell: (params) => (
-  //     <Typography variant="body1" fontWeight={700}>
-  //       -
-  //     </Typography>
-  //   ),
-  // },
+  {
+    field: 'sharing',
+    headerName: pdaTableColumnNames.sharing,
+    renderCell: (params) => (
+      <Typography variant="body1" fontWeight={700}>
+        {params.row.proofs.length || '-'}
+      </Typography>
+    ),
+  },
   {
     field: 'issuanceDate',
     headerName: pdaTableColumnNames.lastModified,
@@ -98,24 +100,24 @@ export const columns: GridColDef<ListPrivateDataAsset>[] = [
   {
     field: 'action',
     type: 'actions',
-    renderCell(params) {
-      if (params.row.structured || params.row.new) return null;
-
-      return renderActionsCell(params);
-    },
-    getActions: () => [
+    // renderCell(params) {
+    //   if (params.row.structured || params.row.new) return null;
+    //   return renderActionsCell(params);
+    // },
+    getActions: (params) => [
+      <GridActionsCellItem
+        key={1}
+        label="Share"
+        icon={<IosShare />}
+        showInMenu
+        onClick={() => onShare(params.row)}
+      />,
       // <GridActionsCellItem
-      //   key={1}
-      //   label="Share"
-      //   icon={<IosShareIcon />}
+      //   label="Download"
+      //   key={2}
+      //   icon={<DownloadIcon />}
       //   showInMenu
       // />,
-      <GridActionsCellItem
-        label="Download"
-        key={2}
-        icon={<DownloadIcon />}
-        showInMenu
-      />,
       // <GridActionsCellItem
       //   key={3}
       //   label="Archive"

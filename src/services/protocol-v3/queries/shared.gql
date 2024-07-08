@@ -9,6 +9,15 @@ query shared {
     }
     data {
       id
+      issuer {
+        did
+        username
+      }
+      fileName
+      issuanceDate
+      mimeType
+      structured
+      url
     }
   }
 }

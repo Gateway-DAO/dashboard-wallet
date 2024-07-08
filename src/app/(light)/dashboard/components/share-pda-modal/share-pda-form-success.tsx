@@ -13,7 +13,7 @@ type Props = {
   proof: Proof;
 };
 
-export default function ShareCopyFormSuccessfully({ proof }: Props) {
+export default function SharePdaFormSuccessfully({ proof }: Props) {
   return (
     <>
       <Stack>

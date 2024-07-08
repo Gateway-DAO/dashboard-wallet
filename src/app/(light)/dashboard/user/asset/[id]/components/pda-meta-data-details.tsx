@@ -1,3 +1,4 @@
+import { SharePdaProvider } from '@/app/(light)/dashboard/components/share-pda-modal/state';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { CONTAINER_PX } from '@/theme/config/style-tokens';
 import { limitCharsCentered } from '@/utils/string';
@@ -5,7 +6,7 @@ import { limitCharsCentered } from '@/utils/string';
 import { FileDownload } from '@mui/icons-material';
 import { Stack, Box, IconButton, Typography } from '@mui/material';
 
-import ShareCopy from './share-copy/share-copy';
+import ShareCopy from './share-copy';
 import PDATabs from './tabs/pda-tabs';
 
 type Props = {
@@ -50,8 +51,9 @@ export default function PDAMetaDataDetails({ pda, isOwner }: Props) {
                 <FileDownload />
               </IconButton>
             )}
-
-            <ShareCopy pda={pda} />
+            <SharePdaProvider>
+              <ShareCopy pda={pda} />
+            </SharePdaProvider>
           </>
         ) : (
           <Box sx={{ height: 40 }} />
