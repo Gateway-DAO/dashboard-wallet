@@ -5,7 +5,7 @@ import { pdas as pdasLocales } from '@/locale/en/pda';
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 
-import { FileType, FileErrorProps } from './types';
+import { FileType } from './types';
 import { readUploadedFile } from './utils';
 
 type Props = {

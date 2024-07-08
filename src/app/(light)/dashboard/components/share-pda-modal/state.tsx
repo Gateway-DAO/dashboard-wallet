@@ -1,11 +1,19 @@
-import { useReducer } from 'react';
+'use client';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from 'react';
 
 import { IdentifierValueSchema } from '@/schemas/identifier-value';
-import { Proof } from '@/services/protocol-v3/types';
+import { PrivateDataAsset, Proof } from '@/services/protocol-v3/types';
 
 type State = {
   status: 'closed' | 'open' | 'qr-code' | 'success' | 'error';
   identifier?: IdentifierValueSchema;
+  pda?: PrivateDataAsset;
   proof?: Proof;
   error?: string;
 };
@@ -22,7 +30,7 @@ export type Action =
   | { type: 'success'; proof: Proof }
   | { type: 'error'; error: string };
 
-export function shareCopyState(state: State, action: Action): State {
+export function sharePdaState(state: State, action: Action): State {
   switch (action.type) {
     case 'open':
       return { status: 'open' };
@@ -39,8 +47,24 @@ export function shareCopyState(state: State, action: Action): State {
   }
 }
 
-export function useShareCopyState() {
-  const [state, dispatch] = useReducer(shareCopyState, initialState);
+export const SharePdaContext = createContext<{
+  state: State;
+  onOpen: () => void;
+  onClose: () => void;
+  onQrCode: (identifier: IdentifierValueSchema) => void;
+  onSuccess: (proof: Proof) => void;
+  onError: (error: string) => void;
+}>({
+  state: initialState,
+  onOpen: () => {},
+  onClose: () => {},
+  onQrCode: () => {},
+  onSuccess: () => {},
+  onError: () => {},
+});
+
+export function SharePdaProvider({ children }: PropsWithChildren) {
+  const [state, dispatch] = useReducer(sharePdaState, initialState);
   const onOpen = () => dispatch({ type: 'open' });
   const onClose = () => dispatch({ type: 'close' });
   const onQrCode = (identifier: IdentifierValueSchema) =>
@@ -48,12 +72,16 @@ export function useShareCopyState() {
   const onSuccess = (proof: Proof) => dispatch({ type: 'success', proof });
   const onError = (error: string) => dispatch({ type: 'error', error });
 
-  return {
-    state,
-    onOpen,
-    onClose,
-    onQrCode,
-    onSuccess,
-    onError,
-  };
+  return (
+    <SharePdaContext.Provider
+      value={{ state, onOpen, onClose, onQrCode, onSuccess, onError }}
+    >
+      {children}
+    </SharePdaContext.Provider>
+  );
 }
+export function useSharePdaState() {
+  return useContext(SharePdaContext);
+}
+
+export type UseSharePdaState = ReturnType<typeof useSharePdaState>;

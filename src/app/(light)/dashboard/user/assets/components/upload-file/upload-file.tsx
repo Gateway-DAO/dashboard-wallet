@@ -1,5 +1,7 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
+
 import FilePicker from '@/components/form/file-picker/file-picker';
 import ModalHeader from '@/components/modal/modal-header/modal-header';
 import ModalRight from '@/components/modal/modal-right/modal-right';
@@ -12,10 +14,14 @@ import UploadModalUploadFiles from './steps/upload';
 export function UploadFile() {
   const { state, close, setDetails, setFinished, setQr, setUpload } =
     useUploadFileState();
-
+  const session = useSession();
+  const currentUserStorage = session.data?.user.totalFileSize ?? 0;
   return (
     <>
-      <FilePicker currentUserStorage={1000} onChange={setDetails} />
+      <FilePicker
+        currentUserStorage={currentUserStorage}
+        onChange={setDetails}
+      />
       <ModalRight
         open={state.step !== Step.Closed}
         onClose={() => {

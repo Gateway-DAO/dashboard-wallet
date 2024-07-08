@@ -35,22 +35,21 @@ export default function PDADetailsTab({ pda }: Props) {
         <RowText title="Created At" />
         <RowSecondaryText text={dayjs(pda.issuanceDate).format(DATE_FORMAT)} />
       </IndividualDetailRow>
-
       <IndividualDetailRow>
         <RowText title="Last Modified" />
         <RowSecondaryText text={dayjs(pda.lastUpdated).format(DATE_FORMAT)} />
       </IndividualDetailRow>
       {!pda.structured && (
-        <>
-          <IndividualDetailRow>
-            <RowText title="Type" />
-            <RowSecondaryText text={pda.mimeType!} />
-          </IndividualDetailRow>
-          <IndividualDetailRow>
-            <RowText title="Size" />
-            <RowSecondaryText text={pda.size ? formatBytes(pda.size) : ''} />
-          </IndividualDetailRow>
-        </>
+        <IndividualDetailRow>
+          <RowText title="Type" />
+          <RowSecondaryText text={pda.mimeType!} />
+        </IndividualDetailRow>
+      )}
+      {!pda.structured && (
+        <IndividualDetailRow>
+          <RowText title="Size" />
+          <RowSecondaryText text={pda.size ? formatBytes(pda.size) : ''} />
+        </IndividualDetailRow>
       )}
       {pda?.tags.length && (
         <IndividualDetailRow>

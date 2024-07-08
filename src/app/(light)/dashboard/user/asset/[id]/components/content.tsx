@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 
 import BackButton from '@/components/buttons/back-button/back-button';
 import TopBarContainer from '@/components/containers/top-bar-container/top-bar-container';
-import routes from '@/constants/routes';
 import { PrivateDataAsset, Organization } from '@/services/protocol-v3/types';
 import {
   CONTAINER_PT,
@@ -25,7 +24,7 @@ type Props = {
   isOwner: boolean;
 };
 
-export default function PDADetailPage({ pda, org, isOwner, backHref }: Props) {
+export default function PDADetailPage({ pda, isOwner, backHref }: Props) {
   return (
     <PageContainer>
       <Box
@@ -64,7 +63,7 @@ export default function PDADetailPage({ pda, org, isOwner, backHref }: Props) {
           flex: 1,
           maxWidth: {
             xs: WIDTH_CENTERED.maxWidth,
-            lg: 400,
+            lg: 470,
           },
           mx: {
             xs: 'auto',

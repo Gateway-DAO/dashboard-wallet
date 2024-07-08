@@ -1,3 +1,4 @@
+'use client';
 import TitleLayout from '@/components/title-layout/title-layout';
 import { pdas as pdasLocales } from '@/locale/en/pda';
 

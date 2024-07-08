@@ -8,7 +8,6 @@ import GtwQrCodeContainer from '@/components/gtw-qr/gtw-qr-code-container';
 import LoadingQRCode from '@/components/gtw-qr/loading-qr-code';
 import routes from '@/constants/routes';
 import { LoginSessionV3 } from '@/types/user';
-import { onSaveSVG } from '@/utils/save-svg';
 import { useMediaQuery } from '@react-hookz/web';
 import { useMutation } from '@tanstack/react-query';
 import { Socket, io } from 'socket.io-client';
@@ -35,7 +34,6 @@ export default function LoginQrCode() {
     }
   );
 
-  const qrRef = useRef<SVGElement>(null);
   const socketTimeoutRef = useRef<NodeJS.Timer | null>(null);
 
   const login = useMutation({
@@ -99,7 +97,7 @@ export default function LoginQrCode() {
       login.mutate({ token, privateKey });
     });
 
-    socketRef.current.on('disconnect', (e) => {
+    socketRef.current.on('disconnect', () => {
       console.log(`[socket] disconnected`);
       setQrCodeData(undefined);
     });
@@ -128,11 +126,7 @@ export default function LoginQrCode() {
   return (
     <>
       <GtwQrCodeContainer>
-        {qrCodeData ? (
-          <GtwQRCode value={qrCodeData} ref={qrRef} />
-        ) : (
-          <LoadingQRCode />
-        )}
+        {qrCodeData ? <GtwQRCode value={qrCodeData} /> : <LoadingQRCode />}
       </GtwQrCodeContainer>
       <Dialog
         open={login.isLoading || login.isSuccess || login.isError}

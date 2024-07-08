@@ -28,7 +28,7 @@ type Props = {
   onError: (error: string) => void;
 };
 
-export default function ShareCopyQrCode({
+export default function SharePdaQrCode({
   identification,
   pda,
   onError,
@@ -73,7 +73,6 @@ export default function ShareCopyQrCode({
     socketRef.current.on(
       'shared',
       async ({ pda, proofId }: { pda: PrivateDataAsset; proofId: string }) => {
-        console.log(pda);
         if (pda.proofs?.length === 0) {
           onError('Error on receiving shared data');
           return;
@@ -82,6 +81,17 @@ export default function ShareCopyQrCode({
         if (!proof) {
           onError('Error on receiving shared data');
           return;
+        }
+
+        if (
+          proof.verifier &&
+          session.data &&
+          proof.verifier.did === session.data.user.did
+        ) {
+          await session.update({
+            type: 'shared',
+            pdas: [pda],
+          } as UpdateSession);
         }
 
         proof.data = [pda];
@@ -109,37 +119,6 @@ export default function ShareCopyQrCode({
       <GtwQrCodeContainer>
         {qrCodeData ? <GtwQRCode value={qrCodeData} /> : <LoadingQRCode />}
       </GtwQrCodeContainer>
-      <p>{qrCodeData}</p>
-      <button
-        type="button"
-        onClick={() => {
-          onSuccess({
-            verifier: {
-              did: 'did:gatewayId:H2RVfDAhudKFczTJgo4aPCCqafelmcIX4W5H:hwrmbGnvFWHEozktwUgfKOfHyHpPhfGk0j3J1GyTOY0Jzgz',
-              username: 'testuser',
-            },
-            data: [
-              {
-                id: 123213213213,
-                dataAsset: {
-                  title: 'Abc',
-                },
-                structured: true,
-              } as PartialDeep<PrivateDataAsset>,
-              {
-                id: 1433,
-                fileName: 'test.pdf',
-                mimeType: 'application/pdf',
-              } as PartialDeep<PrivateDataAsset>,
-            ] satisfies PartialDeep<PrivateDataAsset>[] as any,
-          } satisfies PartialDeep<Proof> as Proof);
-        }}
-      >
-        onSuccess
-      </button>
-      <button type="button" onClick={() => onError('error')}>
-        onError
-      </button>
     </>
   );
 }
