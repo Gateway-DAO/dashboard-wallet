@@ -1,5 +1,10 @@
 'use client';
-import { useReducer } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from 'react';
 
 import { FileType } from '@/components/form/file-picker/types';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
@@ -45,17 +50,43 @@ const stepReducer = (state: StepState, action: StepAction): StepState => {
 
 const initialState: StepState = { step: Step.Closed };
 
-export const useUploadFileState = () => {
+export const UploadFileContext = createContext<{
+  state: StepState;
+  close: () => void;
+  setDetails: (files: FileType[]) => void;
+  setQr: (files: FileType[]) => void;
+  setUpload: (files: FileType[], pda: PrivateDataAsset) => void;
+  setFinished: (files: FileType[], pda: PrivateDataAsset) => void;
+}>({
+  state: initialState,
+  close: () => {},
+  setDetails: () => {},
+  setQr: () => {},
+  setUpload: () => {},
+  setFinished: () => {},
+});
+
+export const UploadFileProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(stepReducer, initialState);
 
   const close = () => dispatch({ type: 'CLOSE' });
-  const setDetails = (files: FileType[]) =>
+  const setDetails = (files: FileType[]) => {
+    if (state.step === Step.Upload) return;
     dispatch({ type: 'SET_DETAILS', files });
+  };
   const setQr = (files: FileType[]) => dispatch({ type: 'SET_QR', files });
   const setUpload = (files: FileType[], pda: PrivateDataAsset) =>
     dispatch({ type: 'SET_UPLOAD', files, pda });
   const setFinished = (files: FileType[], pda: PrivateDataAsset) =>
     dispatch({ type: 'SET_SUCCESS', files, pda });
 
-  return { state, close, setDetails, setQr, setUpload, setFinished };
+  return (
+    <UploadFileContext.Provider
+      value={{ state, close, setDetails, setQr, setUpload, setFinished }}
+    >
+      {children}
+    </UploadFileContext.Provider>
+  );
 };
+
+export const useUploadFileState = () => useContext(UploadFileContext);
