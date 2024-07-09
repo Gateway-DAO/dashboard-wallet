@@ -10,6 +10,7 @@ export const pda = {
   share: {
     share_a_copy_with: 'Share this data',
     share_a_copy_description: 'Fill a Gateway ID, email or wallet',
+    qr_code_modal_title: 'Scan the QR code to share data',
     share_now: 'Share now',
     shared_with: 'Shared with',
     data: 'Data',
