@@ -55,3 +55,17 @@ export const getIconFile = (file: FileType) => {
       return '/images/data_file_generic.svg';
   }
 };
+
+export const getBgColorIconFile = (file: FileType) => {
+  switch (file) {
+    case FileType.pdf:
+    case FileType.image:
+    case FileType.video:
+      return '#E5393516';
+    case FileType.document:
+    case FileType.audio:
+    case FileType.other:
+    default:
+      return '#1E88E516';
+  }
+};

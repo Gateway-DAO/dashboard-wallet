@@ -24,7 +24,7 @@ export default function FileDetail() {
           maxWidth: '100%',
           height: '100%',
           backgroundColor: 'rgba(119, 26, 201, 0.12)',
-          borderRadius: 2,
+          borderRadius: 1,
           minHeight: 566,
           justifyContent: 'center',
           alignItems: 'center',
