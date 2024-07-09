@@ -2,7 +2,6 @@
 import { ChangeEvent, Ref, forwardRef, useState } from 'react';
 
 import { LoadingButton } from '@/components/buttons/loading-button/loading-button';
-import useDropArea from '@/hooks/use-drop-area/use-drop-area';
 
 import { Box, Dialog, Stack } from '@mui/material';
 
@@ -54,10 +53,6 @@ function AvatarPickerField(
     onChange(image);
     onCloseModal();
   };
-
-  const [_dropBond, { over: _isOver }] = useDropArea({
-    onFiles: onReadFile,
-  });
 
   return (
     <>

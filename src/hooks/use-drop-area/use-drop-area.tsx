@@ -81,19 +81,21 @@ const createBond = (
   },
   onDrop: (event) => {
     event.preventDefault();
-    event.persist();
+    if (event.persist) {
+      event.persist();
+    }
     setOver(false);
     process(event.dataTransfer, event);
   },
   onPaste: (event) => {
-    event.persist();
+    if (event.persist) {
+      event.persist();
+    }
     process(event.clipboardData, event);
   },
 });
 
-const useDropArea = (
-  options: DropAreaOptions = {}
-): [DropAreaBond, DropAreaState] => {
+const useDropArea = (options: DropAreaOptions = {}) => {
   const { onFiles, onText, onUri } = options;
   const isMounted = useMountedState();
   const [over, setOver] = useState<boolean>(false);
@@ -106,7 +108,10 @@ const useDropArea = (
     [process, setOver]
   );
 
-  return [bond, { over }];
+  return {
+    bond,
+    isOver: over,
+  };
 };
 
 export default useDropArea;
