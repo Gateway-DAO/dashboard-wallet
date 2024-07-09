@@ -5,7 +5,7 @@ export const useIdentifierTypes = () => {
   const identifierTypes = [
     {
       value: IdentifierType.Username,
-      name: common.identifier.types.gateway_id,
+      name: common.identifier.types.username,
     },
     {
       value: IdentifierType.UserDid,
