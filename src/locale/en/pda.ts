@@ -55,7 +55,10 @@ export const pda = {
   total: 'Total',
 };
 export const pdas = {
-  empty: 'No data assets yet',
+  empty: {
+    text: 'Drop data here to upload',
+    subtext: 'or use the ”upload file” button',
+  },
   load_more: 'load more',
   my_data_assets: 'My data vault',
   data_asset: 'Data asset',
