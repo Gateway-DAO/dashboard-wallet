@@ -10,6 +10,7 @@ export const pda = {
   share: {
     share_a_copy_with: 'Share this data',
     share_a_copy_description: 'Fill a Gateway ID, email or wallet',
+    qr_code_modal_title: 'Scan the QR code to share data',
     share_now: 'Share now',
     shared_with: 'Shared with',
     data: 'Data',
@@ -55,7 +56,10 @@ export const pda = {
   total: 'Total',
 };
 export const pdas = {
-  empty: 'No data assets yet',
+  empty: {
+    text: 'Drop data here to upload',
+    subtext: 'or use the ”upload file” button',
+  },
   load_more: 'load more',
   my_data_assets: 'My data vault',
   data_asset: 'Data asset',
@@ -149,6 +153,7 @@ export const issuePdaForm = {
 export const pdaTableColumnNames = {
   name: 'Name',
   uploadedBy: 'Uploaded By',
+  sharedBy: 'Shared by',
   sharing: 'Sharing',
   lastModified: 'Last Modified',
 };

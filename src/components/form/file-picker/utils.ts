@@ -3,7 +3,7 @@ import {
   MAX_FILE_USER_STORAGE,
 } from '@/constants/file-upload';
 
-import { FileError } from './types';
+import { FileError, FileType } from './types';
 
 export const getFileError = (error?: FileError) => {
   switch (error) {
@@ -29,7 +29,7 @@ export const getFileError = (error?: FileError) => {
 export const readUploadedFile = (
   files: FileList | File[],
   currentUserStorage: number
-) => {
+): FileType[] => {
   const file = files[0];
   if (file.size > MAX_FILE_UPLOAD_SIZE)
     return [

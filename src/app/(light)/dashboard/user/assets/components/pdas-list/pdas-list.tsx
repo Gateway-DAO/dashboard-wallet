@@ -10,7 +10,6 @@ import {
   defaultGridCustomization,
 } from '@/components/data-grid/grid-default';
 import routes from '@/constants/routes';
-import { pdas as pdasLocales } from '@/locale/en/pda';
 import { api } from '@/services/protocol-v3/api';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
 import { useToggle } from '@react-hookz/web';
@@ -22,10 +21,12 @@ import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 
 import UpdateModal from '../../../../components/update-modal/update-modal';
 import { columns } from './columns';
+import Empty from './empty';
 import ShareCopy from './share-copy';
 import { ListPrivateDataAsset } from './types';
 
 // TODO: Merge with SharedList
+
 export default function PDAsList() {
   const { data: sessionData, status } = useSession();
   const router = useRouter();
@@ -70,18 +71,12 @@ export default function PDAsList() {
 
   const isLoading = status === 'loading' || isFetchingLatestPdas;
 
+  if (status === 'authenticated' && !pdas.length) {
+    return <Empty />;
+  }
+
   return (
     <>
-      {/* <UtilsSocketSessionId
-        event="upload"
-        connectionType="upload"
-        eventMethod={(pda: PrivateDataAsset) => {
-          update({
-            type: 'pdas',
-            pdas: [pda],
-          } satisfies SessionUpdate);
-        }}
-      /> */}
       {isLoading && (
         <LinearProgress
           sx={{
@@ -122,15 +117,6 @@ export default function PDAsList() {
           ...defaultGridCustomization,
         }}
       />
-      {!isLoading && !pdas.length && (
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          sx={{ textAlign: 'center', width: '100%' }}
-        >
-          {pdasLocales.empty}
-        </Typography>
-      )}
       <UpdateModal isOpen={isUpdateOpen} toggleOpen={toggleOpenUpdate} />
       <SharePdaProvider>
         <ShareCopy pda={isShareOpen} />

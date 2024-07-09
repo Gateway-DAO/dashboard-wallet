@@ -1,5 +1,6 @@
 import GTWAvatar from '@/components/gtw-avatar/gtw-avatar';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
+import { getIdentity } from '@/utils/identity';
 
 import { ChevronRightOutlined } from '@mui/icons-material';
 import { Divider, IconButton, Stack, Typography } from '@mui/material';
@@ -11,6 +12,10 @@ export default function PDASharingTab({ pda }: { pda: PrivateDataAsset }) {
     <IndividualDetailRow>
       <Stack divider={<Divider />}>
         {pda.proofs.map((proof) => {
+          const verifier = getIdentity({
+            user: proof.verifier!,
+            organization: proof.verifierOrganization,
+          });
           return (
             <Stack
               direction={'row'}
@@ -20,8 +25,9 @@ export default function PDASharingTab({ pda }: { pda: PrivateDataAsset }) {
             >
               <Stack direction={'row'}>
                 <GTWAvatar
-                  name={proof.owner.did}
-                  alt={proof.owner.username ?? proof.owner.did}
+                  name={verifier.username}
+                  alt={verifier.username ?? verifier.did}
+                  src={verifier.image ?? ''}
                   size={45}
                 />
                 <Typography
@@ -29,7 +35,7 @@ export default function PDASharingTab({ pda }: { pda: PrivateDataAsset }) {
                   fontWeight={400}
                   sx={{ mt: 1, mx: 3 }}
                 >
-                  {proof.owner.username ?? proof.owner.did}
+                  {verifier.username ?? verifier.did}
                 </Typography>
               </Stack>
               <IconButton>
