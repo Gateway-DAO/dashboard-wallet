@@ -97,7 +97,7 @@ export const common = {
     type: 'Account type',
     value: 'Address',
     types: {
-      gateway_id: 'Gateway ID',
+      username: 'Username',
       email: 'Email',
       did: 'DID',
       evm_wallet: 'EVM Wallet',

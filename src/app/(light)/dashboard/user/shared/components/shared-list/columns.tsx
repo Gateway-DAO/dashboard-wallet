@@ -80,15 +80,32 @@ export const columns: GridColDef<ListPrivateDataAsset>[] = [
       );
     },
   },
-  // {
-  //   field: 'sharing',
-  //   headerName: pdaTableColumnNames.sharing,
-  //   renderCell: (params) => (
-  //     <Typography variant="body1" fontWeight={700}>
-  //       -
-  //     </Typography>
-  //   ),
-  // },
+  {
+    field: 'shared by',
+    headerName: pdaTableColumnNames.sharedBy,
+    flex: 1,
+    renderCell: (params) => {
+      const pda = params.row;
+
+      const owner = getIdentity({
+        user: pda.owner,
+      });
+
+      return (
+        <Stack direction={'row'}>
+          <GTWAvatar
+            name={owner.did}
+            alt={owner.username}
+            src={owner.image}
+            size={32}
+          />
+          <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
+            {owner.username ?? limitCharsCentered(owner.did, 10)}
+          </Typography>
+        </Stack>
+      );
+    },
+  },
   {
     field: 'issuanceDate',
     headerName: pdaTableColumnNames.lastModified,
