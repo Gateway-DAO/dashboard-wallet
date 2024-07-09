@@ -74,72 +74,85 @@ export default function UserIdentityField({
   });
 
   return (
-    <Stack gap={1} sx={{ flexDirection: { xs: 'column', md: 'row' }, ...sx }}>
-      <FormControl sx={{ width: { xs: '100%', md: 220 } }}>
-        <InputLabel htmlFor="type">{common.identifier.type}</InputLabel>
-        <Select
-          label={common.identifier.type}
-          error={!!typeField.fieldState.error || !!error}
-          id="field-identifier-type"
-          sx={{ mb: { xs: 1, md: 0 } }}
-          inputProps={{ defaultValue: UserIdentifierType.Username }}
-          {...typeField.field}
+    <>
+      <Stack gap={1} sx={{ flexDirection: { xs: 'column', md: 'row' }, ...sx }}>
+        <FormControl sx={{ width: { xs: '100%', md: 220 } }}>
+          <InputLabel htmlFor="type">{common.identifier.type}</InputLabel>
+          <Select
+            label={common.identifier.type}
+            error={!!typeField.fieldState.error || !!error}
+            id="field-identifier-type"
+            sx={{ mb: { xs: 1, md: 0 } }}
+            inputProps={{ defaultValue: UserIdentifierType.Username }}
+            {...typeField.field}
+            onChange={(event) => {
+              typeField.field.onChange(event);
+              addressField.field.onChange('');
+              onChangeType?.(event);
+              clearErrors?.();
+            }}
+            disabled={disabled}
+          >
+            {identifierTypes.map((type) => (
+              <MenuItem
+                key={type?.value}
+                value={type?.value}
+                sx={{ width: '100%', py: 2 }}
+              >
+                <Stack direction="row" alignItems="center" gap={1}>
+                  <Typography
+                    sx={{ display: 'block', color: 'text.secondary' }}
+                  >
+                    {type?.name}
+                  </Typography>
+                </Stack>
+              </MenuItem>
+            ))}
+          </Select>
+          {!!typeField.fieldState.error && (
+            <FormHelperText sx={{ color: 'error' }}>
+              {typeField.fieldState.error.message}
+            </FormHelperText>
+          )}
+        </FormControl>
+        <TextField
+          required
+          id="field-address"
+          {...addressField.field}
           onChange={(event) => {
-            typeField.field.onChange(event);
-            addressField.field.onChange('');
-            onChangeType?.(event);
-            clearErrors?.();
+            addressField.field.onChange(event);
+            onChangeAddress?.(
+              event,
+              typeField.field.value as UserIdentifierType
+            );
           }}
+          error={!!addressField.fieldState.error || !!error}
+          helperText={
+            error
+              ? 'User not found'
+              : helperText ||
+                addressField.fieldState.error?.message ||
+                helperText
+          }
+          type="text"
+          inputMode={
+            addressField.field.value === UserIdentifierType.Email
+              ? 'email'
+              : 'text'
+          }
+          sx={{ flexGrow: 1 }}
           disabled={disabled}
-        >
-          {identifierTypes.map((type) => (
-            <MenuItem
-              key={type?.value}
-              value={type?.value}
-              sx={{ width: '100%', py: 2 }}
-            >
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Typography sx={{ display: 'block', color: 'text.secondary' }}>
-                  {type?.name}
-                </Typography>
-              </Stack>
-            </MenuItem>
-          ))}
-        </Select>
-        {!!typeField.fieldState.error && (
-          <FormHelperText sx={{ color: 'error' }}>
-            {typeField.fieldState.error.message}
-          </FormHelperText>
-        )}
-      </FormControl>
-      <TextField
-        required
-        id="field-address"
-        {...addressField.field}
-        onChange={(event) => {
-          addressField.field.onChange(event);
-          onChangeAddress?.(event, typeField.field.value as UserIdentifierType);
-        }}
-        error={!!addressField.fieldState.error || !!error}
-        helperText={addressField.fieldState.error?.message || helperText}
-        type="text"
-        inputMode={
-          addressField.field.value === UserIdentifierType.Email
-            ? 'email'
-            : 'text'
-        }
-        sx={{ flexGrow: 1 }}
-        disabled={disabled}
-        InputProps={{
-          startAdornment: typeField.field.value ===
-            UserIdentifierType.Username && (
-            <InputAdornment position="start">@</InputAdornment>
-          ),
-          endAdornment: (
-            <InputAdornment position="end">{endAdornment}</InputAdornment>
-          ),
-        }}
-      />
-    </Stack>
+          InputProps={{
+            startAdornment: typeField.field.value ===
+              UserIdentifierType.Username && (
+              <InputAdornment position="start">@</InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">{endAdornment}</InputAdornment>
+            ),
+          }}
+        />
+      </Stack>
+    </>
   );
 }
