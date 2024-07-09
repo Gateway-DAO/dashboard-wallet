@@ -42,7 +42,7 @@ export default function PDAMetaDataDetails({ pda, isOwner }: Props) {
       >
         {isOwner ? (
           <>
-            {pda.url && (
+            {/* {pda.url && (
               <IconButton
                 href={pda.url}
                 target="_blank"
@@ -50,7 +50,7 @@ export default function PDAMetaDataDetails({ pda, isOwner }: Props) {
               >
                 <FileDownload />
               </IconButton>
-            )}
+            )} */}
             <SharePdaProvider>
               <ShareCopy pda={pda} />
             </SharePdaProvider>
@@ -59,9 +59,11 @@ export default function PDAMetaDataDetails({ pda, isOwner }: Props) {
           <Box sx={{ height: 40 }} />
         )}
       </Stack>
-      <Typography variant="h4" sx={{ px: 4, wordBreak: 'break-all' }}>
-        {limitCharsCentered(pda.fileName || pda.dataAsset?.title || '****', 32)}
-      </Typography>
+      {pda.fileName && (
+        <Typography variant="h4" sx={{ px: 4, wordBreak: 'break-all' }}>
+          {limitCharsCentered(pda.fileName, 32)}
+        </Typography>
+      )}
       <Box>
         <PDATabs pda={pda} isOwner={isOwner} />
       </Box>
