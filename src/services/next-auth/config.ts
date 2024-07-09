@@ -1,10 +1,8 @@
 import { NextAuthOptions } from 'next-auth';
 
 import routes from '@/constants/routes';
-import { UpdateSession } from '@/types/session';
 import { LoginSessionV3, SessionV3 } from '@/types/user';
 
-import getDecryptedData from './libs/get-decrypted-data';
 import getMe from './libs/get-me';
 import credentialJwt from './providers/credential-jwt';
 
@@ -18,49 +16,21 @@ export const nextAuthConfig: NextAuthOptions = {
     maxAge: 60 * 60, // 1 hour
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       // We're retrieving the token from the provider
       if (user) {
         token = user as LoginSessionV3;
       }
 
-      if (trigger === 'update' && token && session?.type) {
-        const sessionUpdate: UpdateSession = session;
-
-        switch (sessionUpdate?.type) {
-          case 'pdas':
-            token.injectData.pdas = [
-              ...sessionUpdate.pdas,
-              ...token.injectData.pdas,
-            ];
-            break;
-          case 'shared':
-            token.injectData.sharedPdas = [
-              ...sessionUpdate.pdas,
-              ...token.injectData.sharedPdas,
-            ];
-            break;
-          default:
-            break;
-        }
-      }
       return token;
     },
     async session({ session, token }) {
       try {
         const { me: user, ...protocolV3Data } = await getMe(token.token);
-        const data = await getDecryptedData(token.token, token.privateKey);
         return {
           ...session,
           ...token,
           ...protocolV3Data,
-          ...data,
-          ...(token.injectData?.pdas && {
-            pdas: [...token.injectData?.pdas, ...data.pdas],
-          }),
-          ...(token.injectData?.sharedPdas && {
-            sharedPdas: [...token.injectData?.sharedPdas, ...data.sharedPdas],
-          }),
           user,
         } satisfies SessionV3 as any;
       } catch (e) {

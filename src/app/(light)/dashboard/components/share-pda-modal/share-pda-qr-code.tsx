@@ -13,10 +13,8 @@ import {
   UserIdentificationInput,
 } from '@/services/protocol-v3/types';
 import { UpdateSession } from '@/types/session';
-import { LoginSessionV3 } from '@/types/user';
 import { useMediaQuery } from '@react-hookz/web';
 import { Socket, io } from 'socket.io-client';
-import { PartialDeep } from 'type-fest';
 
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/system';

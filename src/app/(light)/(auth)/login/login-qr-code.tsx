@@ -7,9 +7,11 @@ import GtwQRCode from '@/components/gtw-qr/gtw-qr-code';
 import GtwQrCodeContainer from '@/components/gtw-qr/gtw-qr-code-container';
 import LoadingQRCode from '@/components/gtw-qr/loading-qr-code';
 import routes from '@/constants/routes';
-import { LoginSessionV3 } from '@/types/user';
+import { CryptoService } from '@/services/crypto/crypto';
+import { AppKeys, LoginSessionV3 } from '@/types/user';
 import { useMediaQuery } from '@react-hookz/web';
 import { useMutation } from '@tanstack/react-query';
+import { Bytes } from 'node-forge';
 import { Socket, io } from 'socket.io-client';
 
 import { CheckCircle, Error as ErrorIcon } from '@mui/icons-material';
@@ -25,6 +27,7 @@ import { useTheme } from '@mui/system';
 export default function LoginQrCode() {
   const socketRef = useRef<Socket | null>(null);
   const [qrCodeData, setQrCodeData] = useState<string | undefined>();
+  const keysRef = useRef<{ key: Bytes; iv: Bytes } | null>(null);
   const theme = useTheme();
   const router = useRouter();
   const isDesktop = useMediaQuery(
@@ -34,21 +37,12 @@ export default function LoginQrCode() {
     }
   );
 
-  const socketTimeoutRef = useRef<NodeJS.Timer | null>(null);
-
   const login = useMutation({
     mutationKey: ['login'],
-    mutationFn: async ({
-      token,
-      privateKey,
-    }: {
-      token: string;
-      privateKey: string;
-    }) => {
+    mutationFn: async (data: LoginSessionV3) => {
       try {
         const res = await signIn('credential-jwt', {
-          token,
-          privateKey,
+          ...data,
           redirect: false,
         });
 
@@ -85,17 +79,56 @@ export default function LoginQrCode() {
       },
     });
 
-    socketRef.current.on('create-pub', () => {
-      const sessionId = socketRef.current?.id;
-      console.log(`[socket ${sessionId}] connected`);
-      setQrCodeData(JSON.stringify({ type: 'login', sessionId }));
+    socketRef.current.on('connect', async () => {
+      console.log(`[socket] connected`);
+      const sessionId = socketRef.current!.id;
+
+      const key = CryptoService.generateKey();
+      const iv = CryptoService.generateIV();
+
+      keysRef.current = { key, iv };
+
+      setQrCodeData(
+        JSON.stringify({
+          type: 'login',
+          sessionId,
+          key: CryptoService.bytesToString(key),
+          iv: CryptoService.bytesToString(iv),
+        })
+      );
     });
 
-    socketRef.current.on('login', async (event: LoginSessionV3) => {
-      console.log(`[socket] login`, event);
-      const { token, privateKey } = event;
-      login.mutate({ token, privateKey });
-    });
+    socketRef.current.on(
+      'login',
+      async (event: { token: string; encryptedData: string }) => {
+        console.log(`[socket] login`, event);
+        if (!keysRef.current) {
+          throw new Error('Keys not generated');
+        }
+
+        const decryptedData = CryptoService.decryptStringToBase64(
+          event.encryptedData,
+          keysRef.current.key,
+          keysRef.current.iv
+        );
+
+        if (!decryptedData) {
+          throw new Error('Decryption failed');
+        }
+
+        const keysObject = CryptoService.base64ToObject<AppKeys>(decryptedData);
+
+        if (
+          !keysObject ||
+          !keysObject.privateKey ||
+          !keysObject.signingPrivateKey
+        ) {
+          throw new Error('Decryption failed');
+        }
+
+        login.mutate({ token: event.token, ...keysObject });
+      }
+    );
 
     socketRef.current.on('disconnect', () => {
       console.log(`[socket] disconnected`);
@@ -106,14 +139,8 @@ export default function LoginQrCode() {
   useEffect(() => {
     if (isDesktop) {
       initializeSocket();
-      socketTimeoutRef.current = setInterval(() => {
-        initializeSocket();
-      }, 5 * 60 * 1000);
     }
     return () => {
-      if (socketTimeoutRef.current) {
-        clearInterval(socketTimeoutRef.current);
-      }
       socketRef.current?.disconnect();
     };
   }, [isDesktop, initializeSocket]);
