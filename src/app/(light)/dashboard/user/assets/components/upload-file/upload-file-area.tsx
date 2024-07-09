@@ -30,7 +30,6 @@ export default function UploadFileArea() {
     const onDragLeave = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      // Verificar se o mouse realmente deixou a área de drop
       if (
         !e.relatedTarget ||
         (e.relatedTarget &&
