@@ -153,6 +153,6 @@ export const issuePdaForm = {
 export const pdaTableColumnNames = {
   name: 'Name',
   uploadedBy: 'Uploaded By',
-  sharing: 'Sharing',
+  sharedBy: 'Shared by',
   lastModified: 'Last Modified',
 };
