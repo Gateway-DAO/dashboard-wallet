@@ -154,5 +154,6 @@ export const pdaTableColumnNames = {
   name: 'Name',
   uploadedBy: 'Uploaded By',
   sharedBy: 'Shared by',
+  sharing: 'Sharing',
   lastModified: 'Last Modified',
 };
