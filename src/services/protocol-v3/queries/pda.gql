@@ -1,14 +1,52 @@
-query pdas {
-  myPDAs {
+query pdas($take: Float, $skip: Float, $order: JSON = { updatedAt: "DESC" }) {
+  myPDAs(take: $take, skip: $skip, order: $order) {
     id
     issuer {
       did
       username
     }
+    status
+    lastUpdated
+    issuanceDate
+    expirationDate
+    issuerSignature
+    tags
     fileName
     issuanceDate
     mimeType
     structured
     url
+    owner {
+      did
+      username
+    }
+    issuer {
+      did
+      username
+    }
+    organization {
+      orgname
+      name
+      image
+      did
+    }
+    cipher {
+      aesBlob
+      iv
+      keyBlob
+      tag
+    }
+    proofs {
+      id
+      verifierOrganization {
+        did
+        name
+        orgname
+      }
+      verifier {
+        did
+        username
+      }
+    }
   }
 }

@@ -20,22 +20,13 @@ import {
   renderActionsCell,
 } from '@mui/x-data-grid';
 
-import { ListPrivateDataAsset } from '../../../assets/components/pdas-list/types';
-
-export const columns: GridColDef<ListPrivateDataAsset>[] = [
+export const columns: GridColDef<PrivateDataAsset>[] = [
   {
     field: 'name',
     headerName: pdaTableColumnNames.name,
     flex: 2,
     renderCell: (params) => {
-      let name = '****';
-      if (!params.row.new) {
-        if (params.row.structured && params.row.dataAsset?.title) {
-          name = params.row.dataAsset.title;
-        } else if (params.row.fileName) {
-          name = params.row.fileName;
-        }
-      }
+      const name = params.row.fileName ?? params.row?.dataAsset?.title ?? '';
       const fileType = getFileTypeByPda(params.row);
       const icon = getIconFile(fileType);
 
