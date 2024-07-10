@@ -83,8 +83,8 @@ export default function LoginQrCode() {
       console.log(`[socket] connected`);
       const sessionId = socketRef.current!.id;
 
-      const key = CryptoService.generateKey();
-      const iv = CryptoService.generateIV();
+      const key = CryptoService.bytesToString(CryptoService.generateKey());
+      const iv = CryptoService.bytesToString(CryptoService.generateIV());
 
       keysRef.current = { key, iv };
 
@@ -92,8 +92,8 @@ export default function LoginQrCode() {
         JSON.stringify({
           type: 'login',
           sessionId,
-          key: CryptoService.bytesToString(key),
-          iv: CryptoService.bytesToString(iv),
+          key,
+          iv,
         })
       );
     });
@@ -106,7 +106,7 @@ export default function LoginQrCode() {
           throw new Error('Keys not generated');
         }
 
-        const decryptedData = CryptoService.decryptStringToBase64(
+        const decryptedData = CryptoService.decryptAES(
           event.encryptedData,
           keysRef.current.key,
           keysRef.current.iv

@@ -1,4 +1,4 @@
-import { random, cipher, util, Bytes } from 'node-forge';
+import { random, cipher, util, Bytes, pki, md } from 'node-forge';
 
 export interface KeyPair {
   publicKey: string;
@@ -27,15 +27,40 @@ export class CryptoService {
     return util.encode64(blockCypher.output.getBytes());
   }
 
-  static decryptStringToBase64(encryptedString: string, key: Bytes, iv: Bytes) {
-    const decipher = cipher.createDecipher('AES-CBC', key);
-    decipher.start({ iv: iv });
-    const decodedString = util.decode64(encryptedString);
-    const buffer = util.createBuffer(decodedString);
-    decipher.update(buffer);
-    const result = decipher.finish();
-    console.log(result, decipher.output);
-    return result ? decipher.output.toString() : null;
+  static decryptAES(
+    encryptedString: string,
+    base64Key: string,
+    base64IV: string,
+    base64Tag?: string
+  ) {
+    try {
+      const key = util.decode64(base64Key);
+      const iv = util.decode64(base64IV);
+      const tag = base64Tag
+        ? util.createBuffer(util.decode64(base64Tag))
+        : undefined;
+
+      const decipher = cipher.createDecipher('AES-CBC', key);
+      if (tag) {
+        decipher.start({ iv, tag });
+      } else {
+        decipher.start({ iv });
+      }
+
+      const decodedString = util.decode64(encryptedString);
+      const buffer = util.createBuffer(decodedString);
+      decipher.update(buffer);
+
+      const success = decipher.finish();
+
+      if (!success) {
+        throw new Error(decipher.output.toString());
+      }
+      return decipher.output.toString();
+    } catch (e) {
+      console.log(e);
+      throw new Error(`Decryption failed.`);
+    }
   }
 
   static base64ToObject<T = any>(base64: string): T {
