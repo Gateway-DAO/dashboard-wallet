@@ -1,4 +1,8 @@
+import { CryptoService } from '@/services/crypto/crypto';
 import { PrivateDataAsset } from '@/services/protocol-v3/types';
+import { PartialDeep } from 'type-fest';
+
+import { getClaimObject } from './data-model';
 
 export enum FileType {
   pda,
@@ -69,3 +73,57 @@ export const getBgColorIconFile = (file: FileType) => {
       return '#1E88E516';
   }
 };
+
+const translatedPDAFields: Record<string, string> = {
+  lastUpdated: 'updatedAt',
+} satisfies Partial<Record<keyof PrivateDataAsset, string>>;
+
+export const translatePDAFieldToColumnName = (field: string) => {
+  return translatedPDAFields[field] || field;
+};
+
+export async function decryptPda(
+  pda: PartialDeep<PrivateDataAsset>,
+  pemKey: string
+) {
+  try {
+    let jsonData: Record<string, any> = {};
+
+    if (!pda.structured) {
+      jsonData = {
+        title: pda.fileName,
+        description: 'File description',
+      };
+    } else {
+      const decryptedString = await CryptoService.decryptEncryptedJson(
+        pda.cipher,
+        pemKey
+      );
+      jsonData = JSON.parse(decryptedString);
+    }
+
+    let newClaim = {};
+
+    if (pda.structured) {
+      const claim = jsonData['claim'];
+      const schemaProperties =
+        pda.dataModel != null ? pda.dataModel!.schema['properties'] : null;
+      newClaim =
+        schemaProperties != null
+          ? getClaimObject(schemaProperties, claim)
+          : claim;
+    }
+
+    return {
+      ...pda,
+      dataAsset: {
+        description: jsonData['description']!,
+        title: jsonData['title'],
+        claim: newClaim,
+      },
+    };
+  } catch (e) {
+    console.error(e, pda);
+    throw e;
+  }
+}
