@@ -92,9 +92,7 @@ export default function PDAsList() {
 
   const isLoading = status === 'loading' || isFetchingLatestPdas;
 
-  const a = false;
-
-  if (isSuccess && !a) {
+  if (isSuccess && !pdas?.length) {
     return <Empty />;
   }
 
