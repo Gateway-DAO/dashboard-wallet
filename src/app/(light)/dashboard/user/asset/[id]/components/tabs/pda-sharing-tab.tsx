@@ -10,7 +10,15 @@ import { IndividualDetailRow } from './components';
 export default function PDASharingTab({ pda }: { pda: PrivateDataAsset }) {
   return (
     <IndividualDetailRow>
-      <Stack divider={<Divider />}>
+      <Stack
+        divider={
+          <Divider
+            sx={{
+              mx: { xs: 0, lg: -4 },
+            }}
+          />
+        }
+      >
         {pda.proofs.map((proof) => {
           const verifier = getIdentity({
             user: proof.verifier!,
